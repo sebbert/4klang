@@ -63,6 +63,12 @@ global __4klang_note_buffer
 __4klang_note_buffer		resd	((MAX_SAMPLES)/8) ; // samples every 256 samples and stores 16*2 = 32 values
 %endif
 
+%ifdef GO4K_USE_GMDLS
+%define GM_DLS_SIZE 3440660
+global go4k_gmdls_buffer
+go4k_gmdls_buffer		resb GM_DLS_SIZE
+%endif
+
 ; //========================================================================================
 ; //	.g4kdat section (initialized data for go4k)
 ; //========================================================================================
@@ -93,6 +99,10 @@ go4k_synth_commands		dd	0
 %ifdef	GO4K_USE_FSTG
 						dd	_go4kFSTG_func@0
 %endif
+%ifdef	GO4K_USE_GMDLS
+						dd _go4kGMDLS_func@0
+%endif
+
 
 %ifdef USE_SECTIONS						
 section		.g4kdat2	data	align=1
@@ -100,9 +110,12 @@ section		.g4kdat2	data	align=1
 section .data
 %endif
 
-%ifdef GO4K_USE_16BIT_OUTPUT
+%ifndef GO4K_USE_16BIT_OUTPUT
+%elifndef GO4K_USE_GMDLS
+%else
 c_32767					dd		32767.0
 %endif
+
 c_i128					dd		0.0078125
 c_RandDiv				dd		65536*32768
 c_0_5					dd		0.5
@@ -1307,6 +1320,43 @@ go4kFSTG_func_testpop:
 go4kFSTG_func_done:	
 	ret
 %endif	
+
+
+%ifdef GO4K_USE_GMDLS
+%ifdef USE_SECTIONS
+section		.g4kcodv	code	align=1	
+%else
+section .text
+%endif
+
+; //----------------------------------------------------------------------------------------
+; //	GMDLS Tick (Plays a sample from the gm.dls buffer)
+; //----------------------------------------------------------------------------------------
+; // IN		:		WRK	= unit workspace
+; // IN		:		VAL	= unit values
+; // IN		:		ecx	= global workspace
+; // OUT	:		
+; // DIRTY	:		
+; //----------------------------------------------------------------------------------------
+export_func go4kGMDLS_func@0
+	fldz	;// Load zero in case we're done playing samples
+
+	; // gm.dls samples are 22.05kHz, so play each sample twice.
+	; // The offset is incremented every tick, so divide it by two
+	shr eax, [WRK+go4k_GMDLS_wrk.sample_offset]	; // eax = 44.1kHz sample offset / 2
+	cmp eax, [VAL+go4k_GMDLS_val.sample_length]	; // if the sample has ended, do nothing
+	jge short go4kGMDLS_done
+	add eax, [VAL+go4k_GMDLS_val.file_offset]
+
+	inc WRK+go4k_GMDLS_wrk.sample_offset
+
+	fild word [eax+go4k_gmdls_buffer]
+	fdiv dword [c_32767]
+	faddp
+go4kGMDLS_done:
+	ret
+%endif
+
 
 %ifdef USE_SECTIONS	
 section		.g4kcodj	code	align=1

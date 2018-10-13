@@ -84,6 +84,7 @@
 %define 	GO4K_USE_DLL_MOD_DM				; // define this to enable damping modulation for delay line
 %define 	GO4K_USE_DLL_MOD_SM				; // define this to enable lfo freq modulation for delay line
 %define 	GO4K_USE_DLL_MOD_AM				; // define this to enable lfo depth modulation for delay line
+%define 	GO4K_USE_GMDLS					; // define this to enable gm.dls sample player
 
 ; //----------------------------------------------------------------------------------------
 ; // synth defines
@@ -536,6 +537,25 @@ struc	go4kFSTG_val
 	.size
 endstruc
 struc	go4kFSTG_wrk
+	.size
+endstruc
+%endif
+; //----------------------------------------------------------------------------------------
+; // GMDLS structs
+; //----------------------------------------------------------------------------------------
+%define FILE_OFFSET(val)	val
+GO4K_GMDLS_ID		equ		14
+%macro	GO4K_GMDLS 2
+	dd	%1
+	dd	%2
+%endmacro
+struc	go4kGMDLS_val
+	.file_offset	resd	1
+	.sample_length	resd	1
+	.size
+endstruc
+struc	go4kGMDLS_wrk
+	.sample_offset	resd	1
 	.size
 endstruc
 %endif
