@@ -64,9 +64,9 @@ __4klang_note_buffer		resd	((MAX_SAMPLES)/8) ; // samples every 256 samples and 
 %endif
 
 %ifdef GO4K_USE_GMDLS
-%define GM_DLS_SIZE 3440660
+%define GMDLS_SIZE 3440660
 global go4k_gmdls_buffer
-go4k_gmdls_buffer		resb GM_DLS_SIZE
+go4k_gmdls_buffer		resb GMDLS_SIZE
 %endif
 
 ; //========================================================================================
