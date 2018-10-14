@@ -110,9 +110,9 @@ section		.g4kdat2	data	align=1
 section .data
 %endif
 
-%ifndef GO4K_USE_16BIT_OUTPUT
-%elifndef GO4K_USE_GMDLS
-%else
+%ifdef GO4K_USE_16BIT_OUTPUT
+c_32767					dd		32767.0
+%elifdef GO4K_USE_GMDLS
 c_32767					dd		32767.0
 %endif
 
@@ -1343,12 +1343,14 @@ export_func go4kGMDLS_func@0
 
 	; // gm.dls samples are 22.05kHz, so play each sample twice.
 	; // The offset is incremented every tick, so divide it by two
-	shr eax, [WRK+go4k_GMDLS_wrk.sample_offset]	; // eax = 44.1kHz sample offset / 2
-	cmp eax, [VAL+go4k_GMDLS_val.sample_length]	; // if the sample has ended, do nothing
-	jge short go4kGMDLS_done
-	add eax, [VAL+go4k_GMDLS_val.file_offset]
+	mov eax, [WRK+go4kGMDLS_wrk.sample_offset] ;// EAX = 44.1kHz sample offset
+	and al, ~1 ; Clear LS bit, this both halves the sample rate and converts sample offset to byte offset
 
-	inc WRK+go4k_GMDLS_wrk.sample_offset
+	cmp eax, [VAL+go4kGMDLS_val.sample_size]
+	jge short go4kGMDLS_done	; // We have finished playing the sample, do nothing
+	add eax, [VAL+go4kGMDLS_val.file_offset]
+
+	inc dword [WRK+go4kGMDLS_wrk.sample_offset]
 
 	fild word [eax+go4k_gmdls_buffer]
 	fdiv dword [c_32767]

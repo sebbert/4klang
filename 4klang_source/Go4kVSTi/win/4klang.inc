@@ -543,7 +543,9 @@ endstruc
 ; //----------------------------------------------------------------------------------------
 ; // GMDLS structs
 ; //----------------------------------------------------------------------------------------
+%ifdef GO4K_USE_GMDLS
 %define FILE_OFFSET(val)	val
+%define SAMPLE_SIZE(val)	val
 GO4K_GMDLS_ID		equ		14
 %macro	GO4K_GMDLS 2
 	dd	%1
@@ -551,7 +553,7 @@ GO4K_GMDLS_ID		equ		14
 %endmacro
 struc	go4kGMDLS_val
 	.file_offset	resd	1
-	.sample_length	resd	1
+	.sample_size	resd	1
 	.size
 endstruc
 struc	go4kGMDLS_wrk
