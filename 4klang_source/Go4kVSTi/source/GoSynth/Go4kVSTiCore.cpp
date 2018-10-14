@@ -94,6 +94,7 @@ void Go4kVSTi_Init()
 		BeatsPerMinute = 120.0f;
 		SoloChannel = 0;
 		Solo = 0;
+		Go4kVSTi_LoadGmDls();
 		Go4kVSTi_ResetPatch();
 		initialized = true;
 	}
@@ -3514,4 +3515,9 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 SynthObjectP Go4kVSTi_GetSynthObject()
 {
 	return &SynthObj;
+}
+
+void Go4kVSTi_LoadGmDls()
+{
+	go4k_load_gmdls();
 }
