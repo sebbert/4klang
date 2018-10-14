@@ -15,6 +15,104 @@
 #define T_GLOBAL		1
 #define NUM_TABS		2
 
+extern "C" BYTE go4k_gmdls_buffer;
+
+static const int GMDLS_NUM_SAMPLES = 495;
+static const int GMDLS_WAVE_LIST_OFFSET = 0x00044602;
+
+struct GmDlsSample
+{
+	const char *name;
+	unsigned fileOffsetInBytes;
+	unsigned sizeInBytes;
+};
+
+static GmDlsSample GmDlsSamples[GMDLS_NUM_SAMPLES + 1];
+
+void InitGmDlsSamples()
+{
+	memset(GmDlsSamples, 0, sizeof(GmDlsSample) * (1 + GMDLS_NUM_SAMPLES));
+
+	GmDlsSamples[0].name = "<No sample>";
+	GmDlsSamples[0].fileOffsetInBytes = 0;
+	GmDlsSamples[0].sizeInBytes = 0;
+
+	auto ptr = &go4k_gmdls_buffer + GMDLS_WAVE_LIST_OFFSET;
+
+	for (int i = 0; i < GMDLS_NUM_SAMPLES; i++)
+	{
+		// Walk wave list
+		auto waveListTag = *((unsigned int *)ptr); // Should be 'LIST'
+		ptr += 4;
+		auto waveListSize = *((unsigned int *)ptr);
+		ptr += 4;
+
+		// Walk wave entry
+		auto wave = ptr;
+		auto waveTag = *((unsigned int *)wave); // Should be 'wave'
+		wave += 4;
+
+		// Skip fmt chunk
+		auto fmtChunkTag = *((unsigned int *)wave); // Should be 'fmt '
+		wave += 4;
+		auto fmtChunkSize = *((unsigned int *)wave);
+		wave += 4;
+		wave += fmtChunkSize;
+
+		// Skip wsmp chunk
+		auto wsmpChunkTag = *((unsigned int *)wave); // Should be 'wsmp'
+		wave += 4;
+		auto wsmpChunkSize = *((unsigned int *)wave);
+		wave += 4;
+		wave += wsmpChunkSize;
+
+		// Skip data chunk
+		auto dataChunkTag = *((unsigned int *)wave); // Should be 'data'
+		wave += 4;
+		auto dataChunkSize = *((unsigned int *)wave);
+		wave += 4;
+		auto waveData = wave;
+		wave += dataChunkSize;
+
+		// Walk info list
+		auto infoList = wave;
+		auto infoListTag = *((unsigned int *)infoList); // Should be 'LIST'
+		infoList += 4;
+		auto infoListSize = *((unsigned int *)infoList);
+		infoList += 4;
+
+		// Walk info entry
+		auto info = infoList;
+		auto infoTag = *((unsigned int *)info); // Should be 'INFO'
+		info += 4;
+
+		// Skip copyright chunk
+		auto icopChunkTag = *((unsigned int *)info); // Should be 'ICOP'
+		info += 4;
+		auto icopChunkSize = *((unsigned int *)info);
+		info += 4;
+		// This size appears to be the size minus null terminator, yet each entry has a null terminator
+		//  anyways, so they all seem to end in 00 00. Not sure why.
+		info += icopChunkSize + 1;
+
+		// Read name (finally :D)
+		auto nameChunkTag = *((unsigned int *)info); // Should be 'INAM'
+		info += 4;
+		auto nameChunkSize = *((unsigned int *)info);
+		info += 4;
+
+		// Insert name into appropriate group
+	
+		auto entry = &GmDlsSamples[i + 1];
+		entry->name = (const char *)info;
+		entry->fileOffsetInBytes = waveData - &go4k_gmdls_buffer;
+		entry->sizeInBytes = dataChunkSize;
+
+		ptr += waveListSize;
+	}
+};
+
+
 static HINSTANCE hInstance;
 static UINT_PTR timer = 1;
 static UINT_PTR backupTimer = 2;
@@ -36,6 +134,8 @@ static DWORD UnitCopyBuffer[MAX_UNIT_SLOTS];
 static int InstrumentScrollPos[MAX_INSTRUMENTS];
 static int GlobalScrollPos;
 static int InitDone = false;
+
+
 
 static SynthObjectP SynthObjP;
 
@@ -1988,6 +2088,27 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 				v->flags = ACC_AUX;
 		}
 	}
+	else if (uid == M_GMDLS)
+	{
+		GMDLS_valP v = (GMDLS_valP)val;
+
+		if (LOWORD(id) == IDC_GMDLS_SAMPLE)
+		{
+			auto wnd = ModuleWnd[M_GMDLS];
+			int entryIndex = SendDlgItemMessage(wnd, IDC_GMDLS_SAMPLE, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
+			auto entry = &GmDlsSamples[entryIndex];
+
+			char infoBuf[4096];
+			snprintf(infoBuf, 4096, "# %s\n\nFile offset: %i\nSample size: %i", entry->name, entry->fileOffsetInBytes, entry->sizeInBytes);
+
+			SetWindowText(GetDlgItem(wnd, IDC_GMDLS_SAMPLE_INFO), infoBuf);
+
+			v->fileOffset = entry->fileOffsetInBytes;
+			v->sampleSize = entry->sizeInBytes;
+			//SynthObjP->InstrumentWork->workspace[0] = 0;
+			v->sampleEntryListIndex = entryIndex;
+		}
+	}
 }
 
 bool ButtonPressed(WPARAM id, LPARAM lParam)
@@ -3353,10 +3474,16 @@ void UpdateModule(int uid, BYTE* val)
   else if (uid == M_GMDLS)
   {
     GMDLS_valP v = (GMDLS_valP)val;
+
+		InitGmDlsSamples();
 		
 		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
-		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_ADDSTRING, (WPARAM)0, (LPARAM)"Heyo");
 
+		for (int i = 0; i < GMDLS_NUM_SAMPLES + 1; ++i)
+		{
+			auto sample = &GmDlsSamples[i];
+			SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_ADDSTRING, (WPARAM)0, (LPARAM)sample->name);
+		}
   }
 }
 

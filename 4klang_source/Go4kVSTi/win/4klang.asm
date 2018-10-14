@@ -65,8 +65,8 @@ __4klang_note_buffer		resd	((MAX_SAMPLES)/8) ; // samples every 256 samples and 
 
 %ifdef GO4K_USE_GMDLS
 %define GMDLS_SIZE 3440660
-global go4k_gmdls_buffer
-go4k_gmdls_buffer		resb GMDLS_SIZE
+global _go4k_gmdls_buffer
+_go4k_gmdls_buffer		resb GMDLS_SIZE
 %endif
 
 ; //========================================================================================
@@ -1359,7 +1359,7 @@ export_func go4kGMDLS_func@0
 
 	inc dword [WRK+go4kGMDLS_wrk.sample_offset]
 
-	fild word [eax+go4k_gmdls_buffer]
+	fild word [eax+_go4k_gmdls_buffer]
 	fdiv dword [c_32767]
 	faddp
 go4kGMDLS_done:
@@ -1667,7 +1667,7 @@ export_func go4k_load_gmdls@0
 go4k_load_gmdls_do:
 	
 	push dword OF_READ		; // uStyle
-	push go4k_gmdls_buffer	; // lpReOpenBuff (use gmdls_buffer as this is only needed temporarily)
+	push _go4k_gmdls_buffer	; // lpReOpenBuff (use gmdls_buffer as this is only needed temporarily)
 	push edx				; // lpFileName
 	call _OpenFile@12
 
@@ -1681,7 +1681,7 @@ go4k_load_gmdls_ready:
 	push dword 0			; // lpOverlapped
 	push dword 0			; // lpNumberOfBytesRead
 	push dword GMDLS_SIZE
-	push dword go4k_gmdls_buffer
+	push dword _go4k_gmdls_buffer
 	push eax
 	call _ReadFile@20
 	

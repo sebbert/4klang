@@ -286,7 +286,10 @@ typedef struct GLITCH_val
 typedef struct GMDLS_val
 {
   BYTE id;
-  BYTE sampleIndex;
+  DWORD fileOffset;
+	DWORD sampleSize;
+// GUI STUFF
+	DWORD sampleEntryListIndex;
 } *GMDLS_valP;
 
 /////////////////////////////////////////////////////////////////////////////////////

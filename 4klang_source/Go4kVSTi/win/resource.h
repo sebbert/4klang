@@ -988,6 +988,7 @@
 #define IDC_GLITCH_DTIME                5058
 #define IDC_GLITCH_DTIME_VAL            5059
 #define IDC_GMDLS_SAMPLE                5060
+#define IDC_GMDLS_SAMPLE_INFO           5061
 
 // Next default values for new objects
 // 
