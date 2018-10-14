@@ -15,6 +15,7 @@
 #define IDD_ACC                         110
 #define IDD_FLD                         111
 #define IDD_GLITCH                      112
+#define IDD_GMDLS                       113
 #define IDD_GO4KVSTIDIALOG              115
 #define IDD_INSTRUMENT_STACK            120
 #define IDD_GLOBAL_STACK                121
@@ -986,7 +987,7 @@
 #define IDC_GLITCH_DPITCH_VAL           5057
 #define IDC_GLITCH_DTIME                5058
 #define IDC_GLITCH_DTIME_VAL            5059
-
+#define IDC_GMDLS_SAMPLE                5060
 
 // Next default values for new objects
 // 

@@ -31,6 +31,8 @@ extern "C" void __stdcall go4kOUT_func();
 extern "C" void __stdcall go4kACC_func();
 extern "C" void __stdcall go4kFLD_func();
 extern "C" void __stdcall go4kGLITCH_func();
+extern "C" void __stdcall go4kGMDLS_func();
+extern "C" void __stdcall go4k_load_gmdls();
 extern "C" DWORD go4k_delay_buffer_ofs;
 extern "C" float go4k_delay_buffer;
 extern "C" WORD go4k_delay_times;
@@ -56,7 +58,8 @@ static go4kFunc SynthFuncs[] =
 	go4kOUT_func,
 	go4kACC_func,
 	go4kFLD_func,
-	go4kGLITCH_func
+	go4kGLITCH_func,
+	go4kGMDLS_func,
 };
 
 static float BeatsPerMinute = 120.0f;
@@ -368,6 +371,11 @@ void Go4kVSTi_InitSlot(BYTE* slot, int channel, int type)
 		v->dpitch		=  64;
 		v->guidelay		=  40;
 	}
+  if (type == M_GMDLS)
+  {
+    GMDLS_valP v = (GMDLS_valP)slot;
+    v->sampleIndex = 0;
+  }
 }
 
 // init a instrument slot
@@ -1647,6 +1655,8 @@ struct SynthUses
 	bool fld_vm;
 	
 	bool glitch_use;
+
+	bool gm_dls;
 };
 
 void GetUses(SynthUses *uses, bool InstrumentUsed[])
@@ -1835,6 +1845,10 @@ void GetUses(SynthUses *uses, bool InstrumentUsed[])
 					// if (slot == 0)
 						// uses->glitch_am = true;
 				// }
+			}
+			if (v[0] == M_GMDLS)
+			{
+				uses->gm_dls = true;
 			}
 		}
 	}
@@ -2332,6 +2346,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define 	GO4K_USE_DLL_MOD_SM\n");
 	if (uses.dll_am)
 		fprintf(file, "%%define 	GO4K_USE_DLL_MOD_AM\n");
+  if (uses.gm_dls)
+    fprintf(file, "%%define 	GO4K_USE_GMDLS\n");
 
 		fprintf(file, "%%define	MAX_DELAY			65536\n");
 		fprintf(file, "%%define MAX_UNITS			64\n");
@@ -2733,6 +2749,25 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "endstruc\n");
 		fprintf(file, "%%endif\n");
 
+		fprintf(file, "%%ifdef GO4K_USE_GMDLS\n");
+		fprintf(file, "%%define FILE_OFFSET(val)	val\n");
+		fprintf(file, "%%define SAMPLE_SIZE(val)	val\n");
+		fprintf(file, "GO4K_GMDLS_ID		equ		14\n");
+		fprintf(file, "%%macro	GO4K_GMDLS 2\n");
+		fprintf(file, "	dd	%%1\n");
+		fprintf(file, "	dd	%%2\n");
+		fprintf(file, "%%endmacro\n");
+		fprintf(file, "struc	go4kGMDLS_val\n");
+		fprintf(file, "	.file_offset	resd	1\n");
+		fprintf(file, "	.sample_size	resd	1\n");
+		fprintf(file, "	.size\n");
+		fprintf(file, "endstruc\n");
+		fprintf(file, "struc	go4kGMDLS_wrk\n");
+		fprintf(file, "	.sample_offset	resd	1\n");
+		fprintf(file, "	.size\n");
+		fprintf(file, "endstruc\n");
+		fprintf(file, "%%endif\n");
+
 		fprintf(file, "struc	go4k_instrument\n");
 		fprintf(file, "	.release	resd	1\n");
 		fprintf(file, "	.note		resd	1\n");
@@ -2913,6 +2948,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 				fprintf(file, "\tdb GO4K_FLD_ID\n");
 			if (SynthObj.GlobalValues[u][0] == M_GLITCH)
 				fprintf(file, "\tdb GO4K_GLITCH_ID\n");
+      if (SynthObj.GlobalValues[u][0] == M_GMDLS)
+        fprintf(file, "\tdb GO4K_GMDLS_ID\n");
 		}
 		fprintf(file, "GO4K_END_CMDDEF\n");
 		fprintf(file, "go4k_synth_instructions_end\n");

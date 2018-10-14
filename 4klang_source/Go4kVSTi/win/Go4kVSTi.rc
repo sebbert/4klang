@@ -1291,6 +1291,14 @@ BEGIN
     CTEXT           " ",IDC_GLITCH_DTIME_VAL,242,81,48,12,SS_SUNKEN
 END
 
+IDD_GMDLS DIALOGEX 0, 0, 300, 170
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "gm.dls",IDC_STATIC,0,0,300,170
+    COMBOBOX        IDC_GMDLS_SAMPLE,10,10,100,160, CBS_SIMPLE | WS_VSCROLL | WS_TABSTOP
+
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1337,6 +1345,10 @@ BEGIN
     END
 
     IDD_GLITCH, DIALOG
+    BEGIN
+    END
+
+    IDD_GMDLS, DIALOG
     BEGIN
     END
 END

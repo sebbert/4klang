@@ -53,7 +53,8 @@ static char* UnitName[NUM_MODULES] =
 	"Output",
 	"Accumulate",
 	"Load",
-	"Glitch"
+	"Glitch",
+	"gm.dls",
 };
 
 // minimal signal precondition for each unit
@@ -72,6 +73,7 @@ static int UnitPreSignals[NUM_MODULES] =
 	0,	// acc
 	0,  // fld
 	1,  // glitch
+	0,  // gmdls
 };
 
 // signal post condition (relative to precondition)
@@ -89,7 +91,8 @@ static int UnitPostSignals[NUM_MODULES] =
 	-2,	// out
 	2,	// acc
 	1,	// fld
-	0	// glitch
+	0,	// glitch
+	1,  // gmdls
 };
 
 static char* UnitModulationTargetNames[][8] = 
@@ -107,6 +110,7 @@ static char* UnitModulationTargetNames[][8] =
 	{ "", "", "", "", "", "", "", "" },
 	{ "Value", "", "", "", "", "", "", "" },
 	{ "Active", "Dry", "Delta Size", "Delta Pitch", "", "", "", "" },
+	{ "", "", "", "", "", "", "", "" },
 };
 
 static char* UnitModulationTargetShortNames[][8] = 
@@ -124,6 +128,7 @@ static char* UnitModulationTargetShortNames[][8] =
 	{ "", "", "", "", "", "", "", "" },
 	{ "Value", "", "", "", "", "", "", "" },
 	{ "Active", "Dry", "DSize", "DPitch", "", "", "", "" },
+	{ "", "", "", "", "", "", "", "" },
 };
 
 static char* delayName[33] = 
@@ -298,7 +303,6 @@ char* GetUnitString(BYTE* unit, char* unitname)
 		GLITCH_valP val = (GLITCH_valP)unit;
 		sprintf(UnitDesc, "    (%s)","Glitch");
 	}
-
 	sprintf(unitname, "%s%s", UnitName[unit[0]], UnitDesc);
 	return unitname;
 }
@@ -3346,6 +3350,14 @@ void UpdateModule(int uid, BYTE* val)
 
 		UpdateDelayTimes(v);
 	}
+  else if (uid == M_GMDLS)
+  {
+    GMDLS_valP v = (GMDLS_valP)val;
+		
+		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
+		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_ADDSTRING, (WPARAM)0, (LPARAM)"Heyo");
+
+  }
 }
 
 void UpdateModuleParamWindow(int tab, int unit)

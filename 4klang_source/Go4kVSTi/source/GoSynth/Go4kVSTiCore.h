@@ -88,6 +88,7 @@ enum UnitID
 	M_ACC,
 	M_FLD,
 	M_GLITCH,
+	M_GMDLS,
 	NUM_MODULES
 };
 
@@ -280,6 +281,11 @@ typedef struct GLITCH_val
 	BYTE	guidelay;
 } *GLITCH_valP;
 
+typedef struct GMDLS_val
+{
+  BYTE id;
+  BYTE sampleIndex;
+} *GMDLS_valP;
 
 /////////////////////////////////////////////////////////////////////////////////////
 // workspace definitions
