@@ -116,6 +116,13 @@ c_32767					dd		32767.0
 c_32767					dd		32767.0
 %endif
 
+%ifdef GO4K_USE_GMDLS
+global go4k_gmdls_path_0
+go4k_gmdls_path_0		db "drivers/gm.dls", 0
+global go4k_gmdls_path_1
+go4k_gmdls_path_1		db "drivers/etc/gm.dls", 0
+%endif
+
 c_i128					dd		0.0078125
 c_RandDiv				dd		65536*32768
 c_0_5					dd		0.5
@@ -1627,6 +1634,60 @@ go4k_render_instrument_next2:
 %endif		
 	pop		ecx								; // restore instrument counter	
 	ret
+
+
+%ifdef GO4K_USE_GMDLS
+%ifdef USE_SECTIONS
+section		.g4kcodgi
+%else
+section .text
+%endif
+
+; //----------------------------------------------------------------------------------------
+; // OFSTRUCT
+; //----------------------------------------------------------------------------------------
+%define OFS_MAXPATHNAME			128
+%define OF_READ					0
+%define INVALID_HANDLE_VALUE	-1
+struc OFSTRUCT
+	.cBytes			resb	1
+	.fFixedDisk		resb	1
+	.nErrCode		resd	1
+	.nReserved		resd	2
+	.szPathName		resb	OFS_MAXPATHNAME
+	.size
+endstruc
+
+extern	_OpenFile@12
+extern _ReadFile@20
+
+export_func go4k_load_gmdls@0
+	mov edx, go4k_gmdls_path_0
+	mov eax, INVALID_HANDLE_VALUE
+go4k_load_gmdls_do:
+	
+	push dword OF_READ		; // uStyle
+	push go4k_gmdls_buffer	; // lpReOpenBuff (use gmdls_buffer as this is only needed temporarily)
+	push edx				; // lpFileName
+	call _OpenFile@12
+
+	cmp eax, INVALID_HANDLE_VALUE
+	jne short go4k_load_gmdls_ready
+
+	mov edx, go4k_gmdls_path_1
+	jmp short go4k_load_gmdls_do
+
+go4k_load_gmdls_ready:
+	push dword 0			; // lpOverlapped
+	push dword 0			; // lpNumberOfBytesRead
+	push dword GMDLS_SIZE
+	push dword go4k_gmdls_buffer
+	push eax
+	call _ReadFile@20
+	
+	ret
+%endif
+
 
 %ifdef USE_SECTIONS				
 section		.g4kcody	code	align=1
