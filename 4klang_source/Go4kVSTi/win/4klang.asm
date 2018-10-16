@@ -1353,13 +1353,14 @@ export_func go4kGMDLS_func@0
 	jnz go4kGMDLS_func_go
 	ret
 go4kGMDLS_func_go:
+	fld qword [WRK+go4kGMDLS_wrk.play_time]
 	fild dword [ecx-4]
 	fisub dword [c_60]
 	fmul dword [c_i12]
 	call _Power@0
 	fmul dword [FREQ_NORMALIZE]
-	fadd qword [WRK+go4kGMDLS_wrk.play_time]	
-	fst qword [WRK+go4kGMDLS_wrk.play_time]
+	fadd st0, st1 ; Add delta to previous time
+	fstp qword [WRK+go4kGMDLS_wrk.play_time]
 	fimul dword [c_11025]
 	fistp dword [WRK+go4kGMDLS_wrk.sample_offset_tmp]
 	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
