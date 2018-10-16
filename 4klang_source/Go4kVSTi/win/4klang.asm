@@ -142,6 +142,8 @@ c_dc_const				dd		0.99609375		; R = 1 - (pi*2 * frequency /samplerate)
 global _RandSeed
 _RandSeed				dd		1
 c_24					dd		24
+c_60					dd		60
+c_11025					dd		11025
 c_i12					dd		0x3DAAAAAA
 FREQ_NORMALIZE			dd		0.000092696138	; // 220.0/(2^(69/12)) / 44100.0
 global _LFO_NORMALIZE
@@ -1345,22 +1347,29 @@ section .text
 ; // DIRTY	:		
 ; //----------------------------------------------------------------------------------------
 export_func go4kGMDLS_func@0
-	fldz	;// Load zero in case we're done playing samples
-
-	; // gm.dls samples are 22.05kHz, so play each sample twice.
-	; // The offset is incremented every tick, so divide it by two
-	mov eax, [WRK+go4kGMDLS_wrk.sample_offset] ;// EAX = 44.1kHz sample offset
-	and al, ~1 ; Clear LS bit, this both halves the sample rate and converts sample offset to byte offset
-
+	fldz	; 0 in case we're not playing
+	mov dword eax, [ecx-4]
+	test eax,eax
+	jnz go4kGMDLS_func_go
+	ret
+go4kGMDLS_func_go:
+	fild dword [ecx-4]
+	fisub dword [c_60]
+	fmul dword [c_i12]
+	call _Power@0
+	fmul dword [FREQ_NORMALIZE]
+	fadd qword [WRK+go4kGMDLS_wrk.play_time]	
+	fst qword [WRK+go4kGMDLS_wrk.play_time]
+	fimul dword [c_11025]
+	fistp dword [WRK+go4kGMDLS_wrk.sample_offset_tmp]
+	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
+	and al, ~1
 	cmp eax, [VAL+go4kGMDLS_val.sample_size]
-	jge short go4kGMDLS_done	; // We have finished playing the sample, do nothing
+	jge short go4kGMDLS_done	; We have finished playing the sample, do nothing
 	add eax, [VAL+go4kGMDLS_val.file_offset]
-
-	inc dword [WRK+go4kGMDLS_wrk.sample_offset]
-
 	fild word [eax+_go4k_gmdls_buffer]
 	fdiv dword [c_32767]
-	faddp
+	fstp st1	; Clear initial zero
 go4kGMDLS_done:
 	ret
 %endif

@@ -557,7 +557,8 @@ struc	go4kGMDLS_val
 	.size
 endstruc
 struc	go4kGMDLS_wrk
-	.sample_offset	resd	1
+	.play_time			resq	1
+	.sample_offset_tmp	resd	1
 	.size
 endstruc
 %endif
