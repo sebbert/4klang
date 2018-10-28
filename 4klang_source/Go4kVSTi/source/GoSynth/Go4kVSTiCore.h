@@ -286,6 +286,8 @@ typedef struct GLITCH_val
 typedef struct GMDLS_val
 {
   BYTE id;
+	BYTE transpose;
+	BYTE detune;
   DWORD fileOffset;
 	DWORD sampleSize;
 // GUI STUFF

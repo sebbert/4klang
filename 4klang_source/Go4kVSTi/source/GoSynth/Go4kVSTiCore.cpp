@@ -2756,17 +2756,29 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define FILE_OFFSET(val)	val\n");
 		fprintf(file, "%%define SAMPLE_SIZE(val)	val\n");
 		fprintf(file, "GO4K_GMDLS_ID		equ		14\n");
-		fprintf(file, "%%macro	GO4K_GMDLS 2\n");
-		fprintf(file, "	dd	%%1\n");
-		fprintf(file, "	dd	%%2\n");
+		fprintf(file, "%%macro	GO4K_GMDLS 4\n");
+		fprintf(file, "	db	%%1	; transpose\n");
+		fprintf(file, "	db	%%2	; detune\n");
+		fprintf(file, "	dd	%%4	; file_offset\n");
+		fprintf(file, "	dd	%%5	; sample_size\n");
 		fprintf(file, "%%endmacro\n");
 		fprintf(file, "struc	go4kGMDLS_val\n");
+		fprintf(file, "	.transpose		resb	1\n");
+		fprintf(file, "	.detune			resb	1\n");
+		fprintf(file, "	.file_offset	resd	1\n");
+		fprintf(file, "	.sample_size	resd	1\n");
+		fprintf(file, "	.size\n");
+		fprintf(file, "endstruc\n");
+		fprintf(file, "struc	go4kGMDLS_val_f\n");
+		fprintf(file, "	.transpose		resd	1\n");
+		fprintf(file, "	.detune			resd	1\n");
 		fprintf(file, "	.file_offset	resd	1\n");
 		fprintf(file, "	.sample_size	resd	1\n");
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
 		fprintf(file, "struc	go4kGMDLS_wrk\n");
-		fprintf(file, "	.sample_offset	resd	1\n");
+		fprintf(file, "	.play_time			resq	1\n");
+		fprintf(file, "	.sample_offset_tmp	resd	1\n");
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
 		fprintf(file, "%%endif\n");
@@ -2781,7 +2793,7 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "	.outr		resd	1\n");
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
-
+ 
 		fprintf(file, "struc	go4k_synth\n");
 		fprintf(file, "	.instruments	resb	go4k_instrument.size * MAX_INSTRUMENTS * MAX_VOICES\n");
 		fprintf(file, "	.global			resb	go4k_instrument.size * MAX_VOICES\n");
@@ -2908,7 +2920,9 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 				if (SynthObj.InstrumentValues[i][u][0] == M_FLD)
 					sprintf(comstr, "\tdb GO4K_FLD_ID\n"); 
 				if (SynthObj.InstrumentValues[i][u][0] == M_GLITCH)
-					sprintf(comstr, "\tdb GO4K_GLITCH_ID\n"); 
+					sprintf(comstr, "\tdb GO4K_GLITCH_ID\n");
+				if (SynthObj.InstrumentValues[i][u][0] == M_GMDLS)
+					sprintf(comstr, "\tdb GO4K_GMDLS_ID\n");
 
 				CommandString += comstr;
 			}			
@@ -2951,8 +2965,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 				fprintf(file, "\tdb GO4K_FLD_ID\n");
 			if (SynthObj.GlobalValues[u][0] == M_GLITCH)
 				fprintf(file, "\tdb GO4K_GLITCH_ID\n");
-      if (SynthObj.GlobalValues[u][0] == M_GMDLS)
-        fprintf(file, "\tdb GO4K_GMDLS_ID\n");
+			if (SynthObj.GlobalValues[u][0] == M_GMDLS)
+				fprintf(file, "\tdb GO4K_GMDLS_ID\n");
 		}
 		fprintf(file, "GO4K_END_CMDDEF\n");
 		fprintf(file, "go4k_synth_instructions_end\n");
@@ -3177,6 +3191,12 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 						sprintf(valstr, "\tGO4K_GLITCH\tACTIVE(%d),DRY(%d),SLICEFACTOR(%d),PITCHFACTOR(%d),SLICESIZE(%d) ; ERROR\n",
 							v->active, v->dry, v->dsize, v->dpitch, v->delay);	
 					}
+				}
+				if (SynthObj.InstrumentValues[i][u][0] == M_GMDLS)
+				{
+					GMDLS_valP v = (GMDLS_valP)(SynthObj.InstrumentValues[i][u]);
+					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),FILE_OFFSET(%d),SAMPLE_SIZE(%d)\n",
+						v->transpose, v->detune, v->fileOffset, v->sampleSize);
 				}
 
 				ValueString += valstr;

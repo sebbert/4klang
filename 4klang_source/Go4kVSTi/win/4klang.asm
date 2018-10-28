@@ -1347,14 +1347,29 @@ section .text
 ; // DIRTY	:		
 ; //----------------------------------------------------------------------------------------
 export_func go4kGMDLS_func@0
+	push (2+(2*4))
+	call	go4kTransformValues
+
 	fldz	; 0 in case we're not playing
 	mov dword eax, [ecx-4]
 	test eax,eax
 	jnz go4kGMDLS_func_go
 	ret
 go4kGMDLS_func_go:
+	; Load previous play time for later.
+	; Since we want to include the zeroeth sample,
+	; we calculate the playback time and store it for the next sample
 	fld qword [WRK+go4kGMDLS_wrk.play_time]
-	fild dword [ecx-4]
+
+	fld dword [edx+go4kGMDLS_val_f.transpose]
+	fsub dword [c_0_5]
+	fdiv dword [c_i128]
+	fld dword [edx+go4kGMDLS_val_f.detune]
+	fsub dword [c_0_5]
+	fadd st0
+	faddp
+
+	fiadd dword [ecx-4]	; st0 = note + transpose + detune
 	fisub dword [c_60]
 	fmul dword [c_i12]
 	call _Power@0
@@ -1363,11 +1378,20 @@ go4kGMDLS_func_go:
 	fstp qword [WRK+go4kGMDLS_wrk.play_time]
 	fimul dword [c_11025]
 	fistp dword [WRK+go4kGMDLS_wrk.sample_offset_tmp]
+
 	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
 	and al, ~1
-	cmp eax, [VAL+go4kGMDLS_val.sample_size]
-	jge short go4kGMDLS_done	; We have finished playing the sample, do nothing
-	add eax, [VAL+go4kGMDLS_val.file_offset]
+	cmp eax, [VAL-4] ; Compare with sample size
+	jge short go4kGMDLS_done 
+	add eax, [VAL-8] ; Add offset from start of file
+
+%ifdef GO4K_USE_GMDLS_BOUNDS_CHECK
+	cmp eax,0
+	jle go4kGMDLS_done
+	cmp eax,GMDLS_SIZE
+	jge go4kGMDLS_done
+%endif
+
 	fild word [eax+_go4k_gmdls_buffer]
 	fdiv dword [c_32767]
 	fstp st1	; Clear initial zero
@@ -1712,8 +1736,11 @@ export_func	_4klang_render@4
 export_func	_4klang_render
 %endif
 	pushad
+
+	call _go4k_load_gmdls@0
+
 	xor		ecx, ecx
-%ifdef GO4K_USE_BUFFER_RECORDINGS		
+%ifdef GO4K_USE_BUFFER_RECORDINGS
 	push	ecx
 %endif	
 ; loop all ticks	

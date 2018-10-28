@@ -27,6 +27,7 @@ struct GmDlsSample
 	unsigned sizeInBytes;
 };
 
+static bool HasInitializedGmDlsSamples = false;
 static GmDlsSample GmDlsSamples[GMDLS_NUM_SAMPLES + 1];
 
 void InitGmDlsSamples()
@@ -454,7 +455,7 @@ void UpdateGmDlsInfoText(GMDLS_valP gmdls)
 	auto entry = &GmDlsSamples[gmdls->sampleEntryListIndex];
 
 	char infoBuf[4096];
-	snprintf(infoBuf, 4096, "[[%s]]\n\nFile offset: %i\nSample size: %i", entry->name, entry->fileOffsetInBytes, entry->sizeInBytes);
+	snprintf(infoBuf, 4096, "File offset: %i\nSample size: %i", entry->fileOffsetInBytes, entry->sizeInBytes);
 
 	SetWindowText(GetDlgItem(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE_INFO), infoBuf);
 }
@@ -1617,7 +1618,7 @@ void Go4kVSTiGUI_Show(int showCommand)
 
 void Go4kVSTiGUI_Destroy()
 {
-	Go4kVSTi_SavePatch("C:\\4klang.4kp");
+	Go4kVSTi_SavePatch("C:\\Users\\Sebbert\\4klang.4kp");
 /*
 	if (MessageBox(NULL,"If you didnt save your 4klang patch yet, this information will be lost.\n"
 					"Do you want to save the patch now?",
@@ -2366,6 +2367,18 @@ void SetSliderParams(int uid, BYTE* val, LPARAM lParam)
 		{
 			v->guidelay = SendMessage(GetDlgItem(ModuleWnd[uid], IDC_GLITCH_DTIME), TBM_GETPOS, 0, 0);
 			UpdateDelayTimes(v);
+		}
+	}
+	else if (uid == M_GMDLS)
+	{
+		GMDLS_valP v = (GMDLS_valP)val;
+		if ((HWND)lParam == GetDlgItem(ModuleWnd[uid], IDC_GMDLS_TRANSPOSE))
+		{
+			UpdateSliderValueCenter(IDC_GMDLS_TRANSPOSE, v->transpose);
+		}
+		if ((HWND)lParam == GetDlgItem(ModuleWnd[uid], IDC_GMDLS_DETUNE))
+		{
+			UpdateSliderValueCenter(IDC_GMDLS_DETUNE, v->detune);
 		}
 	}
 }
@@ -3483,14 +3496,23 @@ void UpdateModule(int uid, BYTE* val)
   {
     GMDLS_valP v = (GMDLS_valP)val;
 
-		InitGmDlsSamples();
-		
-		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
+		// transpose
+		InitSliderCenter(ModuleWnd[M_GMDLS], IDC_GMDLS_TRANSPOSE, 0, 128, v->transpose);
+		// detune
+		InitSliderCenter(ModuleWnd[M_GMDLS], IDC_GMDLS_DETUNE, 0, 128, v->detune);
 
-		for (int i = 0; i < GMDLS_NUM_SAMPLES + 1; ++i)
-		{
-			auto sample = &GmDlsSamples[i];
-			SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_ADDSTRING, (WPARAM)0, (LPARAM)sample->name);
+		if (!HasInitializedGmDlsSamples) {
+			InitGmDlsSamples();
+
+			SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
+
+			for (int i = 0; i < GMDLS_NUM_SAMPLES + 1; ++i)
+			{
+				auto sample = &GmDlsSamples[i];
+				SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_ADDSTRING, (WPARAM)0, (LPARAM)sample->name);
+			}
+
+			HasInitializedGmDlsSamples = true;
 		}
 
 		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_SETCURSEL, (WPARAM)v->sampleEntryListIndex, (LPARAM)0);
