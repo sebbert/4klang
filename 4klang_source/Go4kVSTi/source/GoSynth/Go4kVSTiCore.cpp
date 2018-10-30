@@ -372,15 +372,15 @@ void Go4kVSTi_InitSlot(BYTE* slot, int channel, int type)
 		v->dpitch		=  64;
 		v->guidelay		=  40;
 	}
-  if (type == M_GMDLS)
-  {
-    GMDLS_valP v = (GMDLS_valP)slot;
+	if (type == M_GMDLS)
+	{
+		GMDLS_valP v = (GMDLS_valP)slot;
 		v->transpose = 64;
 		v->detune = 64;
 		v->fileOffset = 0;
 		v->sampleSize = 0;
 		v->sampleEntryListIndex = 0;
-  }
+	}
 }
 
 // init a instrument slot
@@ -2351,8 +2351,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define 	GO4K_USE_DLL_MOD_SM\n");
 	if (uses.dll_am)
 		fprintf(file, "%%define 	GO4K_USE_DLL_MOD_AM\n");
-  if (uses.gm_dls)
-    fprintf(file, "%%define 	GO4K_USE_GMDLS\n");
+	if (uses.gm_dls)
+		fprintf(file, "%%define 	GO4K_USE_GMDLS\n");
 
 		fprintf(file, "%%define	MAX_DELAY			65536\n");
 		fprintf(file, "%%define MAX_UNITS			64\n");
