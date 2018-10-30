@@ -375,6 +375,8 @@ void Go4kVSTi_InitSlot(BYTE* slot, int channel, int type)
   if (type == M_GMDLS)
   {
     GMDLS_valP v = (GMDLS_valP)slot;
+		v->transpose = 64;
+		v->detune = 64;
 		v->fileOffset = 0;
 		v->sampleSize = 0;
 		v->sampleEntryListIndex = 0;
