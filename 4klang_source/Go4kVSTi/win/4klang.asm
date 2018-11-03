@@ -117,6 +117,11 @@ c_32767					dd		32767.0
 %endif
 
 %ifdef GO4K_USE_GMDLS
+c_60					dd		60
+c_11025					dd		11025
+%endif
+
+%ifdef GO4K_USE_GMDLS
 global go4k_gmdls_path_0
 go4k_gmdls_path_0		db "drivers/gm.dls", 0
 global go4k_gmdls_path_1
@@ -142,8 +147,6 @@ c_dc_const				dd		0.99609375		; R = 1 - (pi*2 * frequency /samplerate)
 global _RandSeed
 _RandSeed				dd		1
 c_24					dd		24
-c_60					dd		60
-c_11025					dd		11025
 c_i12					dd		0x3DAAAAAA
 FREQ_NORMALIZE			dd		0.000092696138	; // 220.0/(2^(69/12)) / 44100.0
 global _LFO_NORMALIZE
