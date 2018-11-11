@@ -2108,14 +2108,17 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 		{
 			auto wnd = ModuleWnd[M_GMDLS];
 			int entryIndex = SendDlgItemMessage(wnd, IDC_GMDLS_SAMPLE, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
-			auto entry = &GmDlsSamples[entryIndex];
 
-			v->fileOffset = entry->fileOffsetInBytes;
-			v->sampleSize = entry->sizeInBytes;
-			//SynthObjP->InstrumentWork->workspace[0] = 0;
-			v->sampleEntryListIndex = entryIndex;
+			if (entryIndex >= 0 && entryIndex < (GMDLS_NUM_SAMPLES + 1))
+			{
+				auto entry = &GmDlsSamples[entryIndex];
 
-			UpdateGmDlsInfoText(v);
+				v->fileOffset = entry->fileOffsetInBytes;
+				v->sampleSize = entry->sizeInBytes;
+				v->sampleEntryListIndex = entryIndex;
+
+				UpdateGmDlsInfoText(v);
+			}
 		}
 	}
 }
