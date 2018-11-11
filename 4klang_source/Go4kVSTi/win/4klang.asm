@@ -1386,12 +1386,6 @@ go4kGMDLS_func_go:
 	jge short go4kGMDLS_done 
 	add eax, [VAL-8] ; Add offset from start of file
 
-%ifdef GO4K_USE_GMDLS_BOUNDS_CHECK
-	cmp eax,0
-	jle go4kGMDLS_done
-	cmp eax,GMDLS_SIZE
-	jge go4kGMDLS_done
-%endif
 
 	fild word [eax+_go4k_gmdls_buffer]
 	fdiv dword [c_32767]

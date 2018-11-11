@@ -85,7 +85,6 @@
 %define 	GO4K_USE_DLL_MOD_SM				; // define this to enable lfo freq modulation for delay line
 %define 	GO4K_USE_DLL_MOD_AM				; // define this to enable lfo depth modulation for delay line
 %define 	GO4K_USE_GMDLS					; // define this to enable gm.dls sample player
-%define 	GO4K_USE_GMDLS_BOUNDS_CHECK		; // define this to enable bounds checks on gm.dls samples. Only needed in VST.
 
 ; //----------------------------------------------------------------------------------------
 ; // synth defines
