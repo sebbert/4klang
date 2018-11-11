@@ -1679,20 +1679,8 @@ section		.g4kcodgi
 section .text
 %endif
 
-; //----------------------------------------------------------------------------------------
-; // OFSTRUCT
-; //----------------------------------------------------------------------------------------
-%define OFS_MAXPATHNAME			128
 %define OF_READ					0
 %define INVALID_HANDLE_VALUE	-1
-struc OFSTRUCT
-	.cBytes			resb	1
-	.fFixedDisk		resb	1
-	.nErrCode		resd	1
-	.nReserved		resd	2
-	.szPathName		resb	OFS_MAXPATHNAME
-	.size
-endstruc
 
 extern	_OpenFile@12
 extern _ReadFile@20
