@@ -1382,12 +1382,13 @@ go4kGMDLS_func_go:
 
 	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
 	and al, ~1
-	cmp eax, [VAL-4] ; Compare with sample size
-	jge short go4kGMDLS_done 
-	add eax, [VAL-8] ; Add offset from start of file
 
+	mov edx, [VAL-8]
+	add edx, _go4k_gmdls_buffer
+	cmp eax, [edx-4]
+	jge short go4kGMDLS_done
 
-	fild word [eax+_go4k_gmdls_buffer]
+	fild word [eax+edx]
 	fdiv dword [c_32767]
 	fstp st1	; Clear initial zero
 go4kGMDLS_done:
