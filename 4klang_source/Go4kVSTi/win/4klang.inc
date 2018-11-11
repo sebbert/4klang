@@ -551,8 +551,8 @@ GO4K_GMDLS_ID		equ		14
 %macro	GO4K_GMDLS 4
 	db	%1	; transpose
 	db	%2	; detune
-	dd	%4	; file_offset
-	dd	%5	; sample_size
+	dd	%3	; file_offset
+	dd	%4	; sample_size
 %endmacro
 struc	go4kGMDLS_val
 	.transpose		resb	1

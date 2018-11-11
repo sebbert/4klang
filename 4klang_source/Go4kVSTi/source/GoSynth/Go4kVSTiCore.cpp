@@ -2761,8 +2761,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%macro	GO4K_GMDLS 4\n");
 		fprintf(file, "	db	%%1	; transpose\n");
 		fprintf(file, "	db	%%2	; detune\n");
-		fprintf(file, "	dd	%%4	; file_offset\n");
-		fprintf(file, "	dd	%%5	; sample_size\n");
+		fprintf(file, "	dd	%%3	; file_offset\n");
+		fprintf(file, "	dd	%%4	; sample_size\n");
 		fprintf(file, "%%endmacro\n");
 		fprintf(file, "struc	go4kGMDLS_val\n");
 		fprintf(file, "	.transpose		resb	1\n");
