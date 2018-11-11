@@ -1359,9 +1359,7 @@ export_func go4kGMDLS_func@0
 	jnz go4kGMDLS_func_go
 	ret
 go4kGMDLS_func_go:
-	; Load previous play time for later.
-	; Since we want to include the zeroeth sample,
-	; we calculate the playback time and store it for the next sample
+	; Since we want to include the zeroeth sample, we calculate the playback time and store it for the next sample
 	fld qword [WRK+go4kGMDLS_wrk.play_time]
 
 	fld dword [edx+go4kGMDLS_val_f.transpose]
