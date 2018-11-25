@@ -545,26 +545,22 @@ endstruc
 ; //----------------------------------------------------------------------------------------
 %ifdef GO4K_USE_GMDLS
 %define FILE_OFFSET(val)	val
-%define SAMPLE_SIZE(val)	val
 GO4K_GMDLS_ID		equ		14
-%macro	GO4K_GMDLS 4
+%macro	GO4K_GMDLS 3
 	db	%1	; transpose
 	db	%2	; detune
 	dd	%3	; file_offset
-	dd	%4	; sample_size
 %endmacro
 struc	go4kGMDLS_val
 	.transpose		resb	1
 	.detune			resb	1
 	.file_offset	resd	1
-	.sample_size	resd	1
 	.size
 endstruc
 struc	go4kGMDLS_val_f
 	.transpose		resd	1
 	.detune			resd	1
 	.file_offset	resd	1
-	.sample_size	resd	1
 	.size
 endstruc
 struc	go4kGMDLS_wrk

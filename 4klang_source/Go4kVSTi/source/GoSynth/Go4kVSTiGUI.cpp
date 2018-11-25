@@ -455,7 +455,7 @@ void UpdateGmDlsInfoText(GMDLS_valP gmdls)
 	auto entry = &GmDlsSamples[gmdls->sampleEntryListIndex];
 
 	char infoBuf[4096];
-	snprintf(infoBuf, 4096, "File offset: %i\nSample size: %i", entry->fileOffsetInBytes, entry->sizeInBytes);
+	snprintf(infoBuf, 4096, "File offset: %i", entry->fileOffsetInBytes);
 
 	SetWindowText(GetDlgItem(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE_INFO), infoBuf);
 }
@@ -2114,7 +2114,6 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 				auto entry = &GmDlsSamples[entryIndex];
 
 				v->fileOffset = entry->fileOffsetInBytes;
-				v->sampleSize = entry->sizeInBytes;
 				v->sampleEntryListIndex = entryIndex;
 
 				UpdateGmDlsInfoText(v);

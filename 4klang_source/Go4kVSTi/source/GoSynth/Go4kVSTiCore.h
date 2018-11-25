@@ -289,7 +289,6 @@ typedef struct GMDLS_val
 	BYTE transpose;
 	BYTE detune;
 	DWORD fileOffset;
-	DWORD sampleSize;
 // GUI STUFF
 	DWORD sampleEntryListIndex;
 } *GMDLS_valP;

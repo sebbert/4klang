@@ -378,7 +378,6 @@ void Go4kVSTi_InitSlot(BYTE* slot, int channel, int type)
 		v->transpose = 64;
 		v->detune = 64;
 		v->fileOffset = 0;
-		v->sampleSize = 0;
 		v->sampleEntryListIndex = 0;
 	}
 }
@@ -2756,26 +2755,22 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 
 		fprintf(file, "%%ifdef GO4K_USE_GMDLS\n");
 		fprintf(file, "%%define FILE_OFFSET(val)	val\n");
-		fprintf(file, "%%define SAMPLE_SIZE(val)	val\n");
 		fprintf(file, "GO4K_GMDLS_ID		equ		14\n");
-		fprintf(file, "%%macro	GO4K_GMDLS 4\n");
+		fprintf(file, "%%macro	GO4K_GMDLS 3\n");
 		fprintf(file, "	db	%%1	; transpose\n");
 		fprintf(file, "	db	%%2	; detune\n");
 		fprintf(file, "	dd	%%3	; file_offset\n");
-		fprintf(file, "	dd	%%4	; sample_size\n");
 		fprintf(file, "%%endmacro\n");
 		fprintf(file, "struc	go4kGMDLS_val\n");
 		fprintf(file, "	.transpose		resb	1\n");
 		fprintf(file, "	.detune			resb	1\n");
 		fprintf(file, "	.file_offset	resd	1\n");
-		fprintf(file, "	.sample_size	resd	1\n");
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
 		fprintf(file, "struc	go4kGMDLS_val_f\n");
 		fprintf(file, "	.transpose		resd	1\n");
 		fprintf(file, "	.detune			resd	1\n");
 		fprintf(file, "	.file_offset	resd	1\n");
-		fprintf(file, "	.sample_size	resd	1\n");
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
 		fprintf(file, "struc	go4kGMDLS_wrk\n");
@@ -3197,8 +3192,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 				if (SynthObj.InstrumentValues[i][u][0] == M_GMDLS)
 				{
 					GMDLS_valP v = (GMDLS_valP)(SynthObj.InstrumentValues[i][u]);
-					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),FILE_OFFSET(%d),SAMPLE_SIZE(%d)\n",
-						v->transpose, v->detune, v->fileOffset, v->sampleSize);
+					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),FILE_OFFSET(%d)\n",
+						v->transpose, v->detune, v->fileOffset);
 				}
 
 				ValueString += valstr;

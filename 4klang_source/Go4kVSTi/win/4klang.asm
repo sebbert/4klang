@@ -1350,7 +1350,7 @@ section .text
 ; // DIRTY	:		
 ; //----------------------------------------------------------------------------------------
 export_func go4kGMDLS_func@0
-	push (2+(2*4))
+	push 1+1+4
 	call	go4kTransformValues
 
 	fldz	; 0 in case we're not playing
@@ -1375,22 +1375,21 @@ go4kGMDLS_func_go:
 	fmul dword [c_i12]
 	call _Power@0
 	fmul dword [FREQ_NORMALIZE]
-	fadd st0, st1 ; Add delta to previous time
-	fstp qword [WRK+go4kGMDLS_wrk.play_time]
-	fimul dword [c_11025]
+	fadd st0, st1				; Add delta to previous time
+	fstp qword [WRK+go4kGMDLS_wrk.play_time] ; Store playback position for next tick
+	fimul dword [c_11025]		; Multiply by sample rate (22050 hz) / bytes per sample (2)
 	fistp dword [WRK+go4kGMDLS_wrk.sample_offset_tmp]
-
 	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
-	and al, ~1
+	and al, ~1					; Truncate least significant bit
 
-	mov edx, [VAL-8]
-	add edx, _go4k_gmdls_buffer
-	cmp eax, [edx-4]
-	jge short go4kGMDLS_done
+	mov edx, [VAL-4]			; edx = file offset
+	add edx, _go4k_gmdls_buffer	; edx = file offset + gmdls base pointer
+	cmp eax, [edx-4]			; Compare with size (32 bit integer preceding the sample buffer)
+	jge short go4kGMDLS_done	; If we've reached the end, don't play
 
-	fild word [eax+edx]
-	fdiv dword [c_32767]
-	fstp st1	; Clear initial zero
+	fild word [eax+edx]			; Load sample from [(edx = gmdls base pointer + file offset) + (eax = current sample offset)]
+	fdiv dword [c_32767]		; Convert from 16 bit sample
+	fstp st1					; Clear initial zero
 go4kGMDLS_done:
 	ret
 %endif
