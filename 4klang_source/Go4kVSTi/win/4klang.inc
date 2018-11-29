@@ -551,16 +551,15 @@ GO4K_GMDLS_ID		equ		14
 	db	%2	; detune
 	dd	%3	; file_offset
 %endmacro
-struc	go4kGMDLS_val
+struc	go4kGMDLS_val_raw
 	.transpose		resb	1
 	.detune			resb	1
 	.file_offset	resd	1
 	.size
 endstruc
-struc	go4kGMDLS_val_f
+struc	go4kGMDLS_val
 	.transpose		resd	1
 	.detune			resd	1
-	.file_offset	resd	1
 	.size
 endstruc
 struc	go4kGMDLS_wrk

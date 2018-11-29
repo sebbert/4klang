@@ -1362,10 +1362,10 @@ go4kGMDLS_func_go:
 	; Since we want to include the zeroeth sample, we calculate the playback time and store it for the next sample
 	fld qword [WRK+go4kGMDLS_wrk.play_time]
 
-	fld dword [edx+go4kGMDLS_val_f.transpose]
+	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
 	fdiv dword [c_i128]
-	fld dword [edx+go4kGMDLS_val_f.detune]
+	fld dword [edx+go4kGMDLS_val.detune]
 	fsub dword [c_0_5]
 	fadd st0
 	faddp
