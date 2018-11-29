@@ -1384,7 +1384,7 @@ go4kGMDLS_func_go:
 
 	mov edx, [VAL-4]			; edx = file offset
 	add edx, _go4k_gmdls_buffer	; edx = file offset + gmdls base pointer
-	cmp eax, [edx-4]			; Compare with size (32 bit integer preceding the sample buffer)
+	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
 	jge short go4kGMDLS_done	; If we've reached the end, don't play
 
 	fild word [eax+edx]			; Load sample from [(edx = gmdls base pointer + file offset) + (eax = current sample offset)]
