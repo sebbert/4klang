@@ -1353,22 +1353,23 @@ export_func go4kGMDLS_func@0
 	push 1+1+4
 	call	go4kTransformValues
 
-	fldz	; 0 in case we're not playing
 	mov dword eax, [ecx-4]
 	test eax,eax
-	jnz go4kGMDLS_func_go
-	ret
-go4kGMDLS_func_go:
-	; Since we want to include the zeroeth sample, we calculate the playback time and store it for the next sample
-	fld qword [WRK+go4kGMDLS_wrk.play_time]
+	jz short go4kGMDLS_noout
+
 
 	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
 	fdiv dword [c_i128]
+
 	fld dword [edx+go4kGMDLS_val.detune]
 	fsub dword [c_0_5]
 	fadd st0
 	faddp
+
+	; Since we want to include the zeroeth sample, we calculate the playback time and store it for the next sample
+	fld qword [WRK+go4kGMDLS_wrk.play_time]
+	fxch
 
 	fiadd dword [ecx-4]	; st0 = note + transpose + detune
 	fisub dword [c_60]
@@ -1385,12 +1386,13 @@ go4kGMDLS_func_go:
 	mov edx, [VAL-4]			; edx = file offset
 	add edx, _go4k_gmdls_buffer	; edx = file offset + gmdls base pointer
 	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
-	jge short go4kGMDLS_done	; If we've reached the end, don't play
-
+	jge short go4kGMDLS_noout	; If we've reached the end, don't play
+	
 	fild word [eax+edx]			; Load sample from [(edx = gmdls base pointer + file offset) + (eax = current sample offset)]
 	fdiv dword [c_32767]		; Convert from 16 bit sample
-	fstp st1					; Clear initial zero
-go4kGMDLS_done:
+	ret
+go4kGMDLS_noout:
+	fldz
 	ret
 %endif
 
