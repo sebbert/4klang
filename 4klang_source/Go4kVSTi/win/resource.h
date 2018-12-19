@@ -988,7 +988,6 @@
 #define IDC_GLITCH_DTIME                5058
 #define IDC_GLITCH_DTIME_VAL            5059
 #define IDC_GMDLS_SAMPLE                5060
-#define IDC_GMDLS_SAMPLE_INFO           5061
 #define IDC_GMDLS_TRANSPOSE             5062
 #define IDC_GMDLS_TRANSPOSE_VAL         5063
 #define IDC_GMDLS_DETUNE                5064

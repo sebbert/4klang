@@ -450,17 +450,6 @@ void UpdateDelayTimes(GLITCH_valP unit)
 	SetWindowText(GetDlgItem(ModuleWnd[M_GLITCH], IDC_GLITCH_DTIME_VAL), SliderValTxt);
 }
 
-void UpdateGmDlsInfoText(GMDLS_valP gmdls)
-{
-	auto entry = &GmDlsSamples[gmdls->sampleEntryListIndex];
-
-	char infoBuf[4096];
-	snprintf(infoBuf, 4096, "File offset: %i", entry->fileOffsetInBytes);
-
-	SetWindowText(GetDlgItem(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE_INFO), infoBuf);
-}
-
-
 // CB for the main DLG
 BOOL CALLBACK MainDialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) 
 { 
@@ -2115,8 +2104,6 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 
 				v->fileOffset = entry->fileOffsetInBytes;
 				v->sampleEntryListIndex = entryIndex;
-
-				UpdateGmDlsInfoText(v);
 			}
 		}
 	}
@@ -3518,7 +3505,6 @@ void UpdateModule(int uid, BYTE* val)
 		}
 
 		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_SETCURSEL, (WPARAM)v->sampleEntryListIndex, (LPARAM)0);
-		UpdateGmDlsInfoText(v);
   }
 }
 
