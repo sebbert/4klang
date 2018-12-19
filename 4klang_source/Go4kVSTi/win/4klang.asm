@@ -1360,7 +1360,7 @@ section .text
 ; // DIRTY	:		
 ; //----------------------------------------------------------------------------------------
 export_func go4kGMDLS_func@0
-	push 1+1+4
+	push 1+1+4+1
 	call	go4kTransformValues
 
 	mov dword eax, [ecx-4]
@@ -1393,7 +1393,7 @@ export_func go4kGMDLS_func@0
 	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
 	and al, ~1					; Truncate least significant bit
 
-	mov edx, [VAL-4]			; edx = file offset
+	mov edx, [VAL-5]			; edx = file offset
 	add edx, _go4k_gmdls_buffer	; edx = file offset + gmdls base pointer
 	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
 	jge short go4kGMDLS_noout	; If we've reached the end, don't play
