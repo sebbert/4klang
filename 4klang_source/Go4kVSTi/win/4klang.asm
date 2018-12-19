@@ -121,13 +121,6 @@ c_60					dd		60
 c_11025					dd		11025
 %endif
 
-%ifdef GO4K_USE_GMDLS
-global go4k_gmdls_path_0
-go4k_gmdls_path_0		db "drivers/gm.dls", 0
-global go4k_gmdls_path_1
-go4k_gmdls_path_1		db "drivers/etc/gm.dls", 0
-%endif
-
 c_i128					dd		0.0078125
 c_RandDiv				dd		65536*32768
 c_0_5					dd		0.5
@@ -154,6 +147,23 @@ _LFO_NORMALIZE			dd		DEF_LFO_NORMALIZE
 %ifdef GO4K_USE_GROOVE_PATTERN
 go4k_groove_pattern		dw		0011100111001110b
 %endif
+
+
+%ifdef GO4K_USE_GMDLS
+
+%ifdef USE_SECTIONS						
+section		.g4kgmdlspaths	data	align=1
+%else
+section .data
+%endif
+
+global go4k_gmdls_path_0
+go4k_gmdls_path_0		db "drivers/gm.dls", 0
+global go4k_gmdls_path_1
+go4k_gmdls_path_1		db "drivers/etc/gm.dls", 0
+
+%endif
+
 
 ; //========================================================================================
 ; //	.crtemui section (emulates crt functions)
