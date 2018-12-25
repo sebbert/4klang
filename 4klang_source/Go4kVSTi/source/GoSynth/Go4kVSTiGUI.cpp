@@ -499,6 +499,8 @@ BOOL CALLBACK MainDialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM l
 			SendDlgItemMessage(hwndDlg, IDC_CLIPOUTPUT, BM_SETCHECK, 1, 0);
 			SendDlgItemMessage(hwndDlg, IDC_RECORDBUSYSIGNAL, BM_SETCHECK, 1, 0);
 
+			SendDlgItemMessage(hwndDlg, IDC_GMDLS_XP_VISTA_SUPPORT, BM_SETCHECK, false, 0);
+
 			return TRUE;
 		}
 		case WM_COMMAND: 
@@ -3662,7 +3664,8 @@ void GetStreamFileName()
 		int undenormalize = SendDlgItemMessage(DialogWnd, IDC_UNDENORMALIZE, BM_GETCHECK, 0, 0);
 		int objformat = SendDlgItemMessage(DialogWnd, IDC_OBJFORMAT, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 		int output16 = SendDlgItemMessage(DialogWnd, IDC_16BIT, BM_GETCHECK, 0, 0);
-		Go4kVSTi_SaveByteStream(hInstance, ofn.lpstrFile, useenvlevels, useenotevalues, clipoutput, undenormalize, objformat, output16);
+		int gmdlsXpVistaSupport = SendDlgItemMessage(DialogWnd, IDC_GMDLS_XP_VISTA_SUPPORT, BM_GETCHECK, 0, 0);
+		Go4kVSTi_SaveByteStream(hInstance, ofn.lpstrFile, useenvlevels, useenotevalues, clipoutput, undenormalize, objformat, output16, gmdlsXpVistaSupport);
 	}
 }
 

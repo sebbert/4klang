@@ -993,6 +993,7 @@
 #define IDC_GMDLS_DETUNE                5064
 #define IDC_GMDLS_DETUNE_VAL            5065
 #define IDC_GMDLS_STATIC_PITCH          5066
+#define IDC_GMDLS_XP_VISTA_SUPPORT      5067
 
 // Next default values for new objects
 // 

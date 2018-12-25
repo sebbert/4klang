@@ -1858,7 +1858,7 @@ void GetUses(SynthUses *uses, bool InstrumentUsed[])
 	}
 }
 
-void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, int useenotevalues, int clipoutput, int undenormalize, int objformat, int output16)
+void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, int useenotevalues, int clipoutput, int undenormalize, int objformat, int output16, int gmdlsXpVistaSupport)
 {	
 	std::string incfile = filename;
 	// extract path
@@ -2352,6 +2352,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define 	GO4K_USE_DLL_MOD_AM\n");
 	if (uses.gm_dls)
 		fprintf(file, "%%define 	GO4K_USE_GMDLS\n");
+	if (gmdlsXpVistaSupport)
+		fprintf(file, "%%define 	GO4K_USE_GMDLS_XP_VISTA_SUPPORT\n");
 
 		fprintf(file, "%%define	MAX_DELAY			65536\n");
 		fprintf(file, "%%define MAX_UNITS			64\n");

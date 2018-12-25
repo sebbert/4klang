@@ -158,7 +158,10 @@ section .data
 %endif
 
 go4k_gmdls_path_0		db "drivers/gm.dls", 0
+
+%ifdef GO4K_USE_GMDLS_XP_VISTA_SUPPORT
 go4k_gmdls_path_1		db "drivers/etc/gm.dls", 0
+%endif
 
 %endif
 
@@ -1700,12 +1703,14 @@ go4k_load_gmdls_do:
 	push _go4k_gmdls_buffer	; // lpReOpenBuff (use gmdls_buffer as this is only needed temporarily)
 	push edx				; // lpFileName
 	call _OpenFile@12
-
+	
+%ifdef GO4K_USE_GMDLS_XP_VISTA_SUPPORT
 	cmp eax, INVALID_HANDLE_VALUE
 	jne short go4k_load_gmdls_ready
 
 	mov edx, go4k_gmdls_path_1
 	jmp short go4k_load_gmdls_do
+%endif
 
 go4k_load_gmdls_ready:
 	push dword 0			; // lpOverlapped

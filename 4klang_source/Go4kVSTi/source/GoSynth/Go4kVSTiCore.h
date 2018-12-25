@@ -66,7 +66,7 @@ void Go4kVSTi_LoadUnit(char* filename, BYTE* slot);
 // save unit date from specified slot
 void Go4kVSTi_SaveUnit(char* filename, BYTE* slot);
 
-void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, int useenotevalues, int clipoutput, int undenormalize, int objformat, int output16);
+void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, int useenotevalues, int clipoutput, int undenormalize, int objformat, int output16, int gmdlsXpVistaSupport);
 
 void Go4kVSTi_LoadGmDls();
 
