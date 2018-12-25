@@ -1381,8 +1381,12 @@ export_func go4kGMDLS_func@0
 	fld qword [WRK+go4kGMDLS_wrk.play_time]
 	fxch
 
-	fiadd dword [ecx-4]	; st0 = note + transpose + detune
+	test byte [VAL-1], STATIC_PITCH
+	jnz short go4kGMDLS_static_pitch
+	fiadd dword [ecx-4]	; add note
 	fisub dword [c_60]
+go4kGMDLS_static_pitch:
+
 	fmul dword [c_i12]
 	call _Power@0
 	fmul dword [FREQ_NORMALIZE]

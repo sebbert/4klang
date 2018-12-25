@@ -553,6 +553,9 @@ GO4K_GMDLS_ID		equ		14
 	dd	%3	; file_offset
 	db	%4	; flags
 %endmacro
+
+%define STATIC_PITCH	(1<<0)
+
 struc	go4kGMDLS_val_raw
 	.transpose		resb	1
 	.detune			resb	1

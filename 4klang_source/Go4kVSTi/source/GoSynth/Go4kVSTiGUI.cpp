@@ -2093,6 +2093,9 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 	{
 		GMDLS_valP v = (GMDLS_valP)val;
 
+		bool staticPitch = SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_STATIC_PITCH, BM_GETCHECK, 0, 0) == BST_CHECKED;
+		v->flags = (v->flags & ~GMDLS_STATIC_PITCH) | (staticPitch << 0);
+
 		if (LOWORD(id) == IDC_GMDLS_SAMPLE)
 		{
 			auto wnd = ModuleWnd[M_GMDLS];
@@ -3489,6 +3492,9 @@ void UpdateModule(int uid, BYTE* val)
 		InitSliderCenter(ModuleWnd[M_GMDLS], IDC_GMDLS_TRANSPOSE, 0, 128, v->transpose);
 		// detune
 		InitSliderCenter(ModuleWnd[M_GMDLS], IDC_GMDLS_DETUNE, 0, 128, v->detune);
+
+		// static pitch
+		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_STATIC_PITCH, BM_SETCHECK, v->flags & GMDLS_STATIC_PITCH, 0);
 
 		if (!HasInitializedGmDlsSamples) {
 			InitGmDlsSamples();

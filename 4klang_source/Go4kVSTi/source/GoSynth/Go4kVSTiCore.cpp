@@ -3194,8 +3194,12 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 				if (SynthObj.InstrumentValues[i][u][0] == M_GMDLS)
 				{
 					GMDLS_valP v = (GMDLS_valP)(SynthObj.InstrumentValues[i][u]);
-					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),FILE_OFFSET(%d)\n",
-						v->transpose, v->detune, v->fileOffset);
+
+					char *flagstr = "0";
+					if (v->flags & GMDLS_STATIC_PITCH)
+						flagstr = "STATIC_PITCH";
+
+					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),FILE_OFFSET(%d),FLAGS(%s)\n", v->transpose, v->detune, v->fileOffset, flagstr);
 				}
 
 				ValueString += valstr;

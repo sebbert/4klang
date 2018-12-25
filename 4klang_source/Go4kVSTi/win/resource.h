@@ -992,6 +992,7 @@
 #define IDC_GMDLS_TRANSPOSE_VAL         5063
 #define IDC_GMDLS_DETUNE                5064
 #define IDC_GMDLS_DETUNE_VAL            5065
+#define IDC_GMDLS_STATIC_PITCH          5066
 
 // Next default values for new objects
 // 

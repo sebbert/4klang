@@ -283,6 +283,7 @@ typedef struct GLITCH_val
 	BYTE	guidelay;
 } *GLITCH_valP;
 
+#define GMDLS_STATIC_PITCH  (1<<0)
 typedef struct GMDLS_val
 {
 	BYTE id;
