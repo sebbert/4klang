@@ -157,9 +157,7 @@ section		.g4kgmdlspaths	data	align=1
 section .data
 %endif
 
-global go4k_gmdls_path_0
 go4k_gmdls_path_0		db "drivers/gm.dls", 0
-global go4k_gmdls_path_1
 go4k_gmdls_path_1		db "drivers/etc/gm.dls", 0
 
 %endif
