@@ -1303,13 +1303,12 @@ BEGIN
     CONTROL         "Static pitch", IDC_GMDLS_STATIC_PITCH, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 240, 10, 50, 10
 
     LTEXT           "Transpose", IDC_STATIC, 80, 20, 50, 8
-    CONTROL         "", IDC_GMDLS_TRANSPOSE, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 75, 27, 180, 15
-    CTEXT           " ", IDC_GMDLS_TRANSPOSE_VAL, 256, 29, 40, 12, SS_SUNKEN
-
+    CONTROL         "", IDC_GMDLS_TRANSPOSE, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 75, 30, 180, 15
+    CTEXT           " ", IDC_GMDLS_TRANSPOSE_VAL, 256, 32, 40, 12, SS_SUNKEN
 
     LTEXT           "Detune", IDC_STATIC, 80, 50, 50, 8
-    CONTROL         "", IDC_GMDLS_DETUNE, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 75, 57, 180, 15
-    CTEXT           " ", IDC_GMDLS_DETUNE_VAL, 256, 59, 40, 12, SS_SUNKEN
+    CONTROL         "", IDC_GMDLS_DETUNE, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 75, 60, 180, 15
+    CTEXT           " ", IDC_GMDLS_DETUNE_VAL, 256, 62, 40, 12, SS_SUNKEN
 END
 
 /////////////////////////////////////////////////////////////////////////////
