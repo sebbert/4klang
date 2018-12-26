@@ -1363,7 +1363,7 @@ section .text
 ; // DIRTY	:		
 ; //----------------------------------------------------------------------------------------
 export_func go4kGMDLS_func@0
-	push 1+1+4+1
+	push go4kGMDLS_val_raw.size
 	call	go4kTransformValues
 
 	mov dword eax, [ecx-4]
