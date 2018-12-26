@@ -32,7 +32,7 @@ extern "C" void __stdcall go4kACC_func();
 extern "C" void __stdcall go4kFLD_func();
 extern "C" void __stdcall go4kGLITCH_func();
 extern "C" void __stdcall go4kGMDLS_func();
-extern "C" void __stdcall go4k_load_gmdls();
+extern "C" void __stdcall go4kLoadGmdls();
 extern "C" DWORD go4k_delay_buffer_ofs;
 extern "C" float go4k_delay_buffer;
 extern "C" WORD go4k_delay_times;
@@ -94,7 +94,7 @@ void Go4kVSTi_Init()
 		BeatsPerMinute = 120.0f;
 		SoloChannel = 0;
 		Solo = 0;
-		Go4kVSTi_LoadGmDls();
+		go4kLoadGmdls();
 		Go4kVSTi_ResetPatch();
 		initialized = true;
 	}
@@ -3542,9 +3542,4 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 SynthObjectP Go4kVSTi_GetSynthObject()
 {
 	return &SynthObj;
-}
-
-void Go4kVSTi_LoadGmDls()
-{
-	go4k_load_gmdls();
 }

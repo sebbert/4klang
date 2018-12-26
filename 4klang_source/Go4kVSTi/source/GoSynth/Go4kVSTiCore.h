@@ -68,8 +68,6 @@ void Go4kVSTi_SaveUnit(char* filename, BYTE* slot);
 
 void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, int useenotevalues, int clipoutput, int undenormalize, int objformat, int output16, int gmdlsXpVistaSupport);
 
-void Go4kVSTi_LoadGmDls();
-
 #define MAX_POLYPHONY		2
 #define MAX_INSTRUMENTS		16
 #define MAX_UNITS			64
