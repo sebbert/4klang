@@ -1741,7 +1741,9 @@ export_func	_4klang_render
 %endif
 	pushad
 
+%ifdef GO4K_USE_GMDLS
 	call _go4kLoadGmdls@0
+%endif
 
 	xor		ecx, ecx
 %ifdef GO4K_USE_BUFFER_RECORDINGS
