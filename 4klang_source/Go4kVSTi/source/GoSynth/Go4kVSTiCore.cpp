@@ -378,6 +378,7 @@ void Go4kVSTi_InitSlot(BYTE* slot, int channel, int type)
 		v->transpose = 64;
 		v->detune = 64;
 		v->fileOffset = 0;
+		v->flags = 0;
 		v->sampleEntryListIndex = 0;
 	}
 }
