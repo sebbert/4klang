@@ -1402,8 +1402,9 @@ go4kGMDLS_static_pitch:
 
 	fld dword [edx+go4kGMDLS_val.gain] ; Load gain for later
 
-	mov edx, [VAL-5]			; edx = file offset
-	add edx, _go4k_gmdls_buffer	; edx = file offset + gmdls base pointer
+	mov edx, _go4k_gmdls_buffer	; edx = gm.dls base address
+	add edx, [VAL-5]			; edx = gm.dls base address + file offset
+
 	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
 	jge short go4kGMDLS_noout	; If we've reached the end, don't play
 	
