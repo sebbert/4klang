@@ -987,13 +987,13 @@
 #define IDC_GLITCH_DPITCH_VAL           5057
 #define IDC_GLITCH_DTIME                5058
 #define IDC_GLITCH_DTIME_VAL            5059
-#define IDC_GMDLS_SAMPLE                5060
-#define IDC_GMDLS_TRANSPOSE             5062
-#define IDC_GMDLS_TRANSPOSE_VAL         5063
-#define IDC_GMDLS_DETUNE                5064
-#define IDC_GMDLS_DETUNE_VAL            5065
-#define IDC_GMDLS_STATIC_PITCH          5066
-#define IDC_GMDLS_XP_VISTA_SUPPORT      5067
+#define IDC_GMDLS_SAMPLE                6060
+#define IDC_GMDLS_TRANSPOSE             6062
+#define IDC_GMDLS_TRANSPOSE_VAL         6063
+#define IDC_GMDLS_DETUNE                6064
+#define IDC_GMDLS_DETUNE_VAL            6065
+#define IDC_GMDLS_STATIC_PITCH          6066
+#define IDC_GMDLS_XP_VISTA_SUPPORT      6067
 
 // Next default values for new objects
 // 
