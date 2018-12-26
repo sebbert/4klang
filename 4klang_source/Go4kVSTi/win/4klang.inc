@@ -548,11 +548,12 @@ endstruc
 
 %define FILE_OFFSET(val)	val
 GO4K_GMDLS_ID		equ		14
-%macro	GO4K_GMDLS 4
+%macro	GO4K_GMDLS 5
 	db	%1	; transpose
 	db	%2	; detune
-	dd	%3	; file_offset
-	db	%4	; flags
+	db	%3	; gain
+	dd	%4	; file_offset
+	db	%5	; flags
 %endmacro
 
 %define STATIC_PITCH	(1<<0)
@@ -560,6 +561,7 @@ GO4K_GMDLS_ID		equ		14
 struc	go4kGMDLS_val_raw
 	.transpose		resb	1
 	.detune			resb	1
+	.gain			resb	1
 	.file_offset	resd	1
 	.flags			resb	1
 	.size
@@ -567,6 +569,7 @@ endstruc
 struc	go4kGMDLS_val
 	.transpose		resd	1
 	.detune			resd	1
+	.gain			resd	1
 	.size
 endstruc
 struc	go4kGMDLS_wrk

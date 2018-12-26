@@ -2374,6 +2374,10 @@ void SetSliderParams(int uid, BYTE* val, LPARAM lParam)
 		{
 			UpdateSliderValueCenter(IDC_GMDLS_DETUNE, v->detune);
 		}
+		if ((HWND)lParam == GetDlgItem(ModuleWnd[uid], IDC_GMDLS_GAIN))
+		{
+			UpdateSliderValue(IDC_GMDLS_GAIN, v->gain);
+		}
 	}
 }
 
@@ -3494,6 +3498,8 @@ void UpdateModule(int uid, BYTE* val)
 		InitSliderCenter(ModuleWnd[M_GMDLS], IDC_GMDLS_TRANSPOSE, 0, 128, v->transpose);
 		// detune
 		InitSliderCenter(ModuleWnd[M_GMDLS], IDC_GMDLS_DETUNE, 0, 128, v->detune);
+		// gain
+		InitSlider(ModuleWnd[M_GMDLS], IDC_GMDLS_GAIN, 0, 128, v->gain);
 
 		// static pitch
 		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_STATIC_PITCH, BM_SETCHECK, v->flags & GMDLS_STATIC_PITCH, 0);

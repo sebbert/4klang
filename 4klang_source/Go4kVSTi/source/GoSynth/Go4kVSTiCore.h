@@ -287,6 +287,7 @@ typedef struct GMDLS_val
 	BYTE id;
 	BYTE transpose;
 	BYTE detune;
+	BYTE gain;
 	DWORD fileOffset;
 	BYTE flags;
 // GUI STUFF

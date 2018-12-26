@@ -1309,6 +1309,10 @@ BEGIN
     LTEXT           "Detune", IDC_STATIC, 80, 50, 50, 8
     CONTROL         "", IDC_GMDLS_DETUNE, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 75, 60, 180, 15
     CTEXT           " ", IDC_GMDLS_DETUNE_VAL, 256, 62, 40, 12, SS_SUNKEN
+
+    LTEXT           "Gain", IDC_STATIC, 80, 140, 50, 8
+    CONTROL         "", IDC_GMDLS_GAIN, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 75, 150, 180, 15
+    CTEXT           " ", IDC_GMDLS_GAIN_VAL, 256, 152, 40, 12, SS_SUNKEN
 END
 
 /////////////////////////////////////////////////////////////////////////////

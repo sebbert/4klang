@@ -994,6 +994,8 @@
 #define IDC_GMDLS_DETUNE_VAL            6065
 #define IDC_GMDLS_STATIC_PITCH          6066
 #define IDC_GMDLS_XP_VISTA_SUPPORT      6067
+#define IDC_GMDLS_GAIN                  6068
+#define IDC_GMDLS_GAIN_VAL              6069
 
 // Next default values for new objects
 // 

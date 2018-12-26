@@ -377,6 +377,7 @@ void Go4kVSTi_InitSlot(BYTE* slot, int channel, int type)
 		GMDLS_valP v = (GMDLS_valP)slot;
 		v->transpose = 64;
 		v->detune = 64;
+		v->gain = 128;
 		v->fileOffset = 0;
 		v->flags = 0;
 		v->sampleEntryListIndex = 0;
@@ -2760,15 +2761,17 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define FILE_OFFSET(val)	val\n");
 		fprintf(file, "%%define STATIC_PITCH	(1<<0)\n");
 		fprintf(file, "GO4K_GMDLS_ID		equ		14\n");
-		fprintf(file, "%%macro	GO4K_GMDLS 4\n");
+		fprintf(file, "%%macro	GO4K_GMDLS 5\n");
 		fprintf(file, "	db	%%1	; transpose\n");
 		fprintf(file, "	db	%%2	; detune\n");
-		fprintf(file, "	dd	%%3	; file_offset\n");
-		fprintf(file, "	db	%%4	; flags\n");
+		fprintf(file, "	db	%%3	; gain\n");
+		fprintf(file, "	dd	%%4	; file_offset\n");
+		fprintf(file, "	db	%%5	; flags\n");
 		fprintf(file, "%%endmacro\n");
 		fprintf(file, "struc	go4kGMDLS_val_raw\n");
 		fprintf(file, "	.transpose		resb	1\n");
 		fprintf(file, "	.detune			resb	1\n");
+		fprintf(file, "	.gain			resb	1\n");
 		fprintf(file, "	.file_offset	resd	1\n");
 		fprintf(file, "	.flags			resb	1\n");
 		fprintf(file, "	.size\n");
@@ -2776,6 +2779,7 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "struc	go4kGMDLS_val\n");
 		fprintf(file, "	.transpose		resd	1\n");
 		fprintf(file, "	.detune			resd	1\n");
+		fprintf(file, "	.gain			resd	1\n");
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
 		fprintf(file, "struc	go4kGMDLS_wrk\n");
@@ -3202,7 +3206,7 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 					if (v->flags & GMDLS_STATIC_PITCH)
 						flagstr = "STATIC_PITCH";
 
-					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),FILE_OFFSET(%d),FLAGS(%s)\n", v->transpose, v->detune, v->fileOffset, flagstr);
+					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),GAIN(%d),FILE_OFFSET(%d),FLAGS(%s)\n", v->transpose, v->detune, v->gain, v->fileOffset, flagstr);
 				}
 
 				ValueString += valstr;

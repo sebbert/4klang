@@ -1400,6 +1400,8 @@ go4kGMDLS_static_pitch:
 	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
 	and al, ~1					; Truncate least significant bit
 
+	fld dword [edx+go4kGMDLS_val.gain] ; Load gain for later
+
 	mov edx, [VAL-5]			; edx = file offset
 	add edx, _go4k_gmdls_buffer	; edx = file offset + gmdls base pointer
 	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
@@ -1407,6 +1409,7 @@ go4kGMDLS_static_pitch:
 	
 	fild word [eax+edx]			; Load sample from [(edx = gmdls base pointer + file offset) + (eax = current sample offset)]
 	fdiv dword [c_32767]		; Convert from 16 bit sample
+	fmulp						; Multiply by gain
 	ret
 go4kGMDLS_noout:
 	fldz
