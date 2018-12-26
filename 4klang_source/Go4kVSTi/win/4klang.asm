@@ -1373,10 +1373,16 @@ export_func go4kGMDLS_func@0
 
 	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
+%ifdef GO4K_USE_GMDLS_MOD_TRANPOSE
+	fadd dword [WRK+go4kGMDLS_wrk.mod_transpose]
+%endif
 	fdiv dword [c_i128]
 
 	fld dword [edx+go4kGMDLS_val.detune]
 	fsub dword [c_0_5]
+%ifdef GO4K_USE_GMDLS_MOD_DETUNE
+	fadd dword [WRK+go4kGMDLS_wrk.mod_detune]
+%endif
 	fadd st0
 	faddp
 
@@ -1401,6 +1407,9 @@ go4kGMDLS_static_pitch:
 	and al, ~1					; Truncate least significant bit
 
 	fld dword [edx+go4kGMDLS_val.gain] ; Load gain for later
+%ifdef GO4K_USE_GMDLS_MOD_GAIN
+	fadd dword [WRK+go4kGMDLS_wrk.mod_gain]
+%endif
 
 	mov edx, _go4k_gmdls_buffer	; edx = gm.dls base address
 	add edx, [VAL-5]			; edx = gm.dls base address + file offset
