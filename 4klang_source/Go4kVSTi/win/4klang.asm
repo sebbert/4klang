@@ -1698,23 +1698,19 @@ extern _ReadFile@20
 
 export_func go4kLoadGmdls@0
 	mov edx, go4k_gmdls_path_0
-	mov eax, INVALID_HANDLE_VALUE
+
 go4kLoadGmdls_do:
-	
 	push dword OF_READ		; // uStyle
 	push _go4k_gmdls_buffer	; // lpReOpenBuff (use gmdls_buffer as this is only needed temporarily)
 	push edx				; // lpFileName
 	call _OpenFile@12
 	
 %ifdef GO4K_USE_GMDLS_XP_VISTA_SUPPORT
-	cmp eax, INVALID_HANDLE_VALUE
-	jne short go4kLoadGmdls_ready
-
 	mov edx, go4k_gmdls_path_1
-	jmp short go4kLoadGmdls_do
+	cmp eax, INVALID_HANDLE_VALUE
+	je short go4kLoadGmdls_do
 %endif
 
-go4kLoadGmdls_ready:
 	push dword 0			; // lpOverlapped
 	push dword 0			; // lpNumberOfBytesRead
 	push dword GMDLS_SIZE
