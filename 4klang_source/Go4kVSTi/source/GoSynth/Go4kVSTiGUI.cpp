@@ -403,6 +403,12 @@ char* GetUnitString(BYTE* unit, char* unitname)
 		GLITCH_valP val = (GLITCH_valP)unit;
 		sprintf(UnitDesc, "    (%s)","Glitch");
 	}
+	if (unit[0] == M_GMDLS)
+	{
+		GMDLS_valP val = (GMDLS_valP)unit;
+		auto sampleEntry = &GmDlsSamples[val->sampleEntryListIndex];
+		snprintf(UnitDesc, 127, "  (%s)", sampleEntry->name);
+	}
 	sprintf(unitname, "%s%s", UnitName[unit[0]], UnitDesc);
 	return unitname;
 }
