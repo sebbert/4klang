@@ -27,7 +27,6 @@ struct GmDlsSample
 	unsigned sizeInBytes;
 };
 
-static bool HasInitializedGmDlsSamples = false;
 static GmDlsSample GmDlsSamples[GMDLS_NUM_SAMPLES + 1];
 
 void InitGmDlsSamples()
@@ -1585,6 +1584,7 @@ void Go4kVSTiGUI_Create(HINSTANCE hInst)
 	GlobalScrollPos = 0;
 
 	Go4kVSTi_Init();
+	InitGmDlsSamples();
 	SynthObjP = Go4kVSTi_GetSynthObject();
 	UpdateControls(SelectedInstrument);
 
@@ -3504,9 +3504,8 @@ void UpdateModule(int uid, BYTE* val)
 		// static pitch
 		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_STATIC_PITCH, BM_SETCHECK, v->flags & GMDLS_STATIC_PITCH, 0);
 
-		if (!HasInitializedGmDlsSamples) {
-			InitGmDlsSamples();
-
+		static bool HasInitializedGmDlsSampleComboBox = false;
+		if (!HasInitializedGmDlsSampleComboBox) {
 			SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
 
 			for (int i = 0; i < GMDLS_NUM_SAMPLES + 1; ++i)
@@ -3515,7 +3514,7 @@ void UpdateModule(int uid, BYTE* val)
 				SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_ADDSTRING, (WPARAM)0, (LPARAM)sample->name);
 			}
 
-			HasInitializedGmDlsSamples = true;
+			HasInitializedGmDlsSampleComboBox = true;
 		}
 
 		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_SETCURSEL, (WPARAM)v->sampleEntryListIndex, (LPARAM)0);
