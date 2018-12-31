@@ -1373,7 +1373,7 @@ export_func go4kGMDLS_func@0
 
 	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
-%ifdef GO4K_USE_GMDLS_MOD_TRANPOSE
+%ifdef GO4K_USE_GMDLS_MOD_TRANSPOSE
 	fadd dword [WRK+go4kGMDLS_wrk.mod_transpose]
 %endif
 	fdiv dword [c_i128]
