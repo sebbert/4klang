@@ -210,7 +210,7 @@ static char* UnitModulationTargetNames[][8] =
 	{ "", "", "", "", "", "", "", "" },
 	{ "Value", "", "", "", "", "", "", "" },
 	{ "Active", "Dry", "Delta Size", "Delta Pitch", "", "", "", "" },
-	{ "", "", "", "", "", "", "", "" },
+	{ "Transpose", "Detune", "Gain", "", "", "", "", "" },
 };
 
 static char* UnitModulationTargetShortNames[][8] = 
@@ -228,7 +228,7 @@ static char* UnitModulationTargetShortNames[][8] =
 	{ "", "", "", "", "", "", "", "" },
 	{ "Value", "", "", "", "", "", "", "" },
 	{ "Active", "Dry", "DSize", "DPitch", "", "", "", "" },
-	{ "", "", "", "", "", "", "", "" },
+	{ "Transp", "Detune", "Gain", "", "", "", "", "" },
 };
 
 static char* delayName[33] = 
