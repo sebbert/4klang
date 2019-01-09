@@ -3496,9 +3496,9 @@ void UpdateModule(int uid, BYTE* val)
 
 		UpdateDelayTimes(v);
 	}
-  else if (uid == M_GMDLS)
-  {
-    GMDLS_valP v = (GMDLS_valP)val;
+	else if (uid == M_GMDLS)
+	{
+		GMDLS_valP v = (GMDLS_valP)val;
 
 		// transpose
 		InitSliderCenter(ModuleWnd[M_GMDLS], IDC_GMDLS_TRANSPOSE, 0, 128, v->transpose);
