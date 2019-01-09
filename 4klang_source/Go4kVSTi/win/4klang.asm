@@ -98,7 +98,7 @@ go4k_synth_commands		dd	0
 %endif						
 %ifdef	GO4K_USE_FSTG
 						dd	_go4kFSTG_func@0
-%else
+%elifdef	GO4K_USE_GMDLS
 						dd	0
 %endif
 %ifdef	GO4K_USE_GMDLS
