@@ -1662,7 +1662,7 @@ struct SynthUses
 	
 	bool glitch_use;
 
-	bool gm_dls;
+	bool gmdls;
 };
 
 void GetUses(SynthUses *uses, bool InstrumentUsed[])
@@ -1854,7 +1854,7 @@ void GetUses(SynthUses *uses, bool InstrumentUsed[])
 			}
 			if (v[0] == M_GMDLS)
 			{
-				uses->gm_dls = true;
+				uses->gmdls = true;
 			}
 		}
 	}
@@ -2352,7 +2352,7 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define 	GO4K_USE_DLL_MOD_SM\n");
 	if (uses.dll_am)
 		fprintf(file, "%%define 	GO4K_USE_DLL_MOD_AM\n");
-	if (uses.gm_dls)
+	if (uses.gmdls)
 		fprintf(file, "%%define 	GO4K_USE_GMDLS\n");
 	if (gmdlsXpVistaSupport)
 		fprintf(file, "%%define 	GO4K_USE_GMDLS_XP_VISTA_SUPPORT\n");
