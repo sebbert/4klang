@@ -1663,6 +1663,9 @@ struct SynthUses
 	bool glitch_use;
 
 	bool gmdls;
+	bool gmdls_tm;
+	bool gmdls_dm;
+	bool gmdls_gm;
 };
 
 void GetUses(SynthUses *uses, bool InstrumentUsed[])
@@ -1851,6 +1854,15 @@ void GetUses(SynthUses *uses, bool InstrumentUsed[])
 					// if (slot == 0)
 						// uses->glitch_am = true;
 				// }
+				if (v2[0] == M_GMDLS)
+				{
+					if (slot == 0)
+						uses->gmdls_tm = true;
+					if (slot == 1)
+						uses->gmdls_dm = true;
+					if (slot == 2)
+						uses->gmdls_gm = true;
+				}
 			}
 			if (v[0] == M_GMDLS)
 			{
@@ -2356,6 +2368,12 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define 	GO4K_USE_GMDLS\n");
 	if (gmdlsXpVistaSupport)
 		fprintf(file, "%%define 	GO4K_USE_GMDLS_XP_VISTA_SUPPORT\n");
+	if (uses.gmdls_tm)
+		fprintf(file, "%%define 	GO4K_USE_GMDLS_MOD_TRANSPOSE\n");
+	if (uses.gmdls_dm)
+		fprintf(file, "%%define 	GO4K_USE_GMDLS_MOD_DETUNE\n");
+	if (uses.gmdls_gm)
+		fprintf(file, "%%define 	GO4K_USE_GMDLS_MOD_GAIN\n");
 
 		fprintf(file, "%%define	MAX_DELAY			65536\n");
 		fprintf(file, "%%define MAX_UNITS			64\n");
@@ -2783,6 +2801,9 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
 		fprintf(file, "struc	go4kGMDLS_wrk\n");
+		fprintf(file, "	.mod_transpose		resd	1\n");
+		fprintf(file, "	.mod_detune			resd	1\n");
+		fprintf(file, "	.mod_gain			resd	1\n");
 		fprintf(file, "	.play_time			resq	1\n");
 		fprintf(file, "	.sample_offset_tmp	resd	1\n");
 		fprintf(file, "	.size\n");
