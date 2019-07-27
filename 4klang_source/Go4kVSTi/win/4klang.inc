@@ -91,6 +91,22 @@
 %define		GO4K_USE_GMDLS_MOD_GAIN			; // define this to enable gm.dls gain modulation code
 %define		GO4K_USE_GMDLS_DYNAMIC_PITCH	; // define this to enable gm.dls note pitch tracking
 %define		GO4K_USE_GMDLS_LOWER_BOUNDS_CHECK; // define this to enable gm.dls lower bounds check (only needed to avoid crashes while editing)
+%define     GO4k_USE_GMDLS_FLAGS
+
+; //----------------------------------------------------------------------------------------
+; // utility macros
+; //----------------------------------------------------------------------------------------
+
+; // Expands to $structname.$fieldname
+%define FIELD_OFFSET($structname, $fieldname) ($structname %+ . %+ $fieldname)
+
+; // Expands to the negative offset of a struct field, relative to the byte following the last byte of this struct.
+; // For example, the last byte of the struct would expand to -1.
+; // This requires the struct to have a ".size" field.
+%define FIELD_BACKWARDS_OFFSET($structname, $fieldname) (FIELD_OFFSET($structname, $fieldname) - FIELD_OFFSET($structname, size))
+
+; // Expands to the effective address of a raw value (backwards in the VAL buffer)
+%define RAW_VAL($strucname, $fieldname) [esi+FIELD_BACKWARDS_OFFSET($strucname, $fieldname)]
 
 ; //----------------------------------------------------------------------------------------
 ; // synth defines
