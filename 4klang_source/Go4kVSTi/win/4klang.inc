@@ -574,7 +574,9 @@ GO4K_GMDLS_ID		equ		14
 	db	%2	; detune
 	db	%3	; gain
 	dd	%4	; file_offset
+%ifdef GO4k_USE_GMDLS_FLAGS
 	db	%5	; flags
+%endif
 %endmacro
 
 %define STATIC_PITCH	(1<<0)
@@ -584,7 +586,9 @@ struc	go4kGMDLS_val_raw
 	.detune			resb	1
 	.gain			resb	1
 	.file_offset	resd	1
+%ifdef GO4k_USE_GMDLS_FLAGS
 	.flags			resb	1
+%endif
 	.size
 endstruc
 struc	go4kGMDLS_val
