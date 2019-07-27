@@ -1403,10 +1403,11 @@ go4kGMDLS_static_pitch:
 	fmul dword [FREQ_NORMALIZE]
 	fadd st0, st1				; Add delta to previous time
 	fstp qword [WRK+go4kGMDLS_wrk.play_time] ; Store playback position for next tick
-	fimul dword [c_11025]		; Multiply by sample rate (22050 hz) / bytes per sample (2)
+	fimul dword [c_11025]		; Multiply by 11025 = sample rate (22050 hz) / bytes per sample (2)
+                                ; st(0) now contains the "byte" offset into the sample, which we will later quantize to an even 16 bit word offset
 	fistp dword [WRK+go4kGMDLS_wrk.sample_offset_tmp]
 	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
-	and al, ~1					; Truncate least significant bit
+	and al, ~1					; Quantize to even 16 bit word offset
 
 	mov edx, _go4k_gmdls_buffer	; edx = gm.dls base address
 	add edx, [VAL-5]			; edx = gm.dls base address + file offset
