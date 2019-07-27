@@ -105,7 +105,7 @@
 ; // This requires the struct to have a ".size" field.
 %define FIELD_BACKWARDS_OFFSET($structname, $fieldname) (FIELD_OFFSET($structname, $fieldname) - FIELD_OFFSET($structname, size))
 
-; // Expands to the effective address of a raw value (backwards in the VAL buffer)
+; // Expands to the effective address of an untransformed value (backwards in the VAL buffer)
 %define RAW_VAL($strucname, $fieldname) [esi+FIELD_BACKWARDS_OFFSET($strucname, $fieldname)]
 
 ; //----------------------------------------------------------------------------------------
