@@ -1370,7 +1370,6 @@ export_func go4kGMDLS_func@0
 	test eax,eax
 	jz short go4kGMDLS_noout
 
-
 	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
 %ifdef GO4K_USE_GMDLS_MOD_TRANSPOSE
@@ -1391,7 +1390,7 @@ export_func go4kGMDLS_func@0
 	fxch
 
 %ifdef GO4K_USE_GMDLS_DYNAMIC_PITCH
-	test byte [VAL-1], STATIC_PITCH
+	test byte RAW_VAL(go4kGMDLS_val_raw, flags), STATIC_PITCH
 	jnz short go4kGMDLS_static_pitch
 	fiadd dword [ecx-4]	; add note
 	fisub dword [c_60]
@@ -1410,7 +1409,7 @@ go4kGMDLS_static_pitch:
 	and al, ~1					; Quantize to even 16 bit word offset
 
 	mov edx, _go4k_gmdls_buffer	; edx = gm.dls base address
-	add edx, [VAL-5]			; edx = gm.dls base address + file offset
+	add edx, RAW_VAL(go4kGMDLS_val_raw, file_offset)			; edx = gm.dls base address + file offset
 
 	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
 	jge short go4kGMDLS_noout	; If we've reached the end, don't play
