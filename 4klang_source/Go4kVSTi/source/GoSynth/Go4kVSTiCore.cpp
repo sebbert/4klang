@@ -1667,6 +1667,7 @@ struct SynthUses
 	bool gmdls_dm;
 	bool gmdls_gm;
 	bool gmdls_flags;
+	bool gmdls_dynamic_pitch;
 };
 
 void GetUses(SynthUses *uses, bool InstrumentUsed[])
@@ -1871,7 +1872,10 @@ void GetUses(SynthUses *uses, bool InstrumentUsed[])
 				uses->gmdls = true;
 
 				if (valP->flags & GMDLS_DYNAMIC_PITCH)
+				{
 					uses->gmdls_flags = true;
+					uses->gmdls_dynamic_pitch = true;
+				}
 			}
 		}
 	}
@@ -2381,6 +2385,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define 	GO4K_USE_GMDLS_MOD_GAIN\n");
 	if (uses.gmdls_flags)
 		fprintf(file, "%%define 	GO4K_USE_GMDLS_FLAGS\n");
+	if (uses.gmdls_dynamic_pitch)
+		fprintf(file, "%%define 	GO4K_USE_GMDLS_DYNAMIC_PITCH\n");
 
 		fprintf(file, "%%define FIELD_OFFSET($structname, $fieldname) ($structname %%+ . %%+ $fieldname)\n");
 		fprintf(file, "%%define FIELD_BACKWARDS_OFFSET($structname, $fieldname) (FIELD_OFFSET($structname, $fieldname) - FIELD_OFFSET($structname, size))\n");
