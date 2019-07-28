@@ -90,8 +90,8 @@
 %define		GO4K_USE_GMDLS_MOD_DETUNE		; // define this to enable gm.dls detune modulation code
 %define		GO4K_USE_GMDLS_MOD_GAIN			; // define this to enable gm.dls gain modulation code
 %define		GO4K_USE_GMDLS_DYNAMIC_PITCH	; // define this to enable gm.dls note pitch tracking
-%define		GO4K_USE_GMDLS_LOWER_BOUNDS_CHECK; // define this to enable gm.dls lower bounds check (only needed to avoid crashes while editing)
-%define     GO4K_USE_GMDLS_FLAGS            ; // define this if any gm.dls feature that requires flags is used
+%define		GO4K_USE_GMDLS_LOWER_BOUNDS_CHECK;// define this to enable gm.dls lower bounds check (only needed to avoid crashes while editing)
+%define		GO4K_USE_GMDLS_FLAGS			; // define this if any gm.dls feature that requires flags is used
 
 ; //----------------------------------------------------------------------------------------
 ; // utility macros
