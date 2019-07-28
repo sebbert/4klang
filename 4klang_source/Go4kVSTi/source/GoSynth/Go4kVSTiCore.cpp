@@ -3230,7 +3230,7 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 				{
 					GMDLS_valP v = (GMDLS_valP)(SynthObj.InstrumentValues[i][u]);
 
-					char *flagstr = "0";
+					const char *flagstr = "0";
 					if (v->flags & GMDLS_STATIC_PITCH)
 						flagstr = "STATIC_PITCH";
 
