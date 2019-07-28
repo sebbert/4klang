@@ -2101,8 +2101,8 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 	{
 		GMDLS_valP v = (GMDLS_valP)val;
 
-		bool staticPitch = SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_STATIC_PITCH, BM_GETCHECK, 0, 0) == BST_CHECKED;
-		v->flags = (v->flags & ~GMDLS_STATIC_PITCH) | (staticPitch << 0);
+		bool dynamicPitch = SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_DYNAMIC_PITCH, BM_GETCHECK, 0, 0) == BST_CHECKED;
+		v->flags = (v->flags & ~GMDLS_DYNAMIC_PITCH) | dynamicPitch;
 
 		if (LOWORD(id) == IDC_GMDLS_SAMPLE)
 		{
@@ -3507,8 +3507,8 @@ void UpdateModule(int uid, BYTE* val)
 		// gain
 		InitSlider(ModuleWnd[M_GMDLS], IDC_GMDLS_GAIN, 0, 128, v->gain);
 
-		// static pitch
-		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_STATIC_PITCH, BM_SETCHECK, v->flags & GMDLS_STATIC_PITCH, 0);
+		// dynamic pitch
+		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_DYNAMIC_PITCH, BM_SETCHECK, v->flags & GMDLS_DYNAMIC_PITCH, 0);
 
 		static bool HasInitializedGmDlsSampleComboBox = false;
 		if (!HasInitializedGmDlsSampleComboBox) {

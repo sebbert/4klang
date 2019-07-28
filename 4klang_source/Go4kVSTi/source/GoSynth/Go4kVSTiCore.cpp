@@ -379,7 +379,7 @@ void Go4kVSTi_InitSlot(BYTE* slot, int channel, int type)
 		v->detune = 64;
 		v->gain = 128;
 		v->fileOffset = 0;
-		v->flags = 0;
+		v->flags = GMDLS_DYNAMIC_PITCH;
 		v->sampleEntryListIndex = 0;
 	}
 }
@@ -1870,7 +1870,7 @@ void GetUses(SynthUses *uses, bool InstrumentUsed[])
 				auto valP = (GMDLS_valP)v;
 				uses->gmdls = true;
 
-				if (valP->flags & GMDLS_STATIC_PITCH)
+				if (valP->flags & GMDLS_DYNAMIC_PITCH)
 					uses->gmdls_flags = true;
 			}
 		}
@@ -3231,8 +3231,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 					GMDLS_valP v = (GMDLS_valP)(SynthObj.InstrumentValues[i][u]);
 
 					const char *flagstr = "0";
-					if (v->flags & GMDLS_STATIC_PITCH)
-						flagstr = "STATIC_PITCH";
+					if (v->flags & GMDLS_DYNAMIC_PITCH)
+						flagstr = "DYNAMIC_PITCH";
 
 					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),GAIN(%d),FILE_OFFSET(%d),FLAGS(%s)\n", v->transpose, v->detune, v->gain, v->fileOffset, flagstr);
 				}

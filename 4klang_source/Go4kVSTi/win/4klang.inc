@@ -579,7 +579,7 @@ GO4K_GMDLS_ID		equ		14
 %endif
 %endmacro
 
-%define STATIC_PITCH	(1<<0)
+%define DYNAMIC_PITCH	(1<<0)
 
 struc	go4kGMDLS_val_raw
 	.transpose		resb	1

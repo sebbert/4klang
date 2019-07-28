@@ -1390,8 +1390,8 @@ export_func go4kGMDLS_func@0
 	fxch
 
 %ifdef GO4K_USE_GMDLS_DYNAMIC_PITCH
-	test byte RAW_VAL(go4kGMDLS_val_raw, flags), STATIC_PITCH
-	jnz short go4kGMDLS_static_pitch
+	test byte RAW_VAL(go4kGMDLS_val_raw, flags), DYNAMIC_PITCH
+	jz short go4kGMDLS_static_pitch
 	fiadd dword [ecx-4]	; add note
 	fisub dword [c_60]
 go4kGMDLS_static_pitch:
