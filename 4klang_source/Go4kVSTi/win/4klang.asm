@@ -1368,7 +1368,7 @@ export_func go4kGMDLS_func@0
 
 	mov dword eax, [ecx-4]
 	test eax,eax
-	jz short go4kGMDLS_noout
+	jz go4kGMDLS_noout
 
 	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
