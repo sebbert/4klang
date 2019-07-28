@@ -2787,22 +2787,27 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%endif\n");
 
 		fprintf(file, "%%ifdef GO4K_USE_GMDLS\n");
+
 		fprintf(file, "%%define FILE_OFFSET(val)	val\n");
-		fprintf(file, "%%define STATIC_PITCH	(1<<0)\n");
 		fprintf(file, "GO4K_GMDLS_ID		equ		14\n");
 		fprintf(file, "%%macro	GO4K_GMDLS 5\n");
 		fprintf(file, "	db	%%1	; transpose\n");
 		fprintf(file, "	db	%%2	; detune\n");
 		fprintf(file, "	db	%%3	; gain\n");
 		fprintf(file, "	dd	%%4	; file_offset\n");
+		fprintf(file, "%%ifdef GO4K_USE_GMDLS_FLAGS\n");
 		fprintf(file, "	db	%%5	; flags\n");
+		fprintf(file, "%%endif\n");
 		fprintf(file, "%%endmacro\n");
+		fprintf(file, "%%define DYNAMIC_PITCH	(1<<0)\n");
 		fprintf(file, "struc	go4kGMDLS_val_raw\n");
 		fprintf(file, "	.transpose		resb	1\n");
 		fprintf(file, "	.detune			resb	1\n");
 		fprintf(file, "	.gain			resb	1\n");
 		fprintf(file, "	.file_offset	resd	1\n");
+		fprintf(file, "%%ifdef GO4K_USE_GMDLS_FLAGS\n");
 		fprintf(file, "	.flags			resb	1\n");
+		fprintf(file, "%%endif\n");
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
 		fprintf(file, "struc	go4kGMDLS_val\n");
@@ -2812,9 +2817,11 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "	.size\n");
 		fprintf(file, "endstruc\n");
 		fprintf(file, "struc	go4kGMDLS_wrk\n");
+		fprintf(file, "	; modulation targets\n");
 		fprintf(file, "	.mod_transpose		resd	1\n");
 		fprintf(file, "	.mod_detune			resd	1\n");
 		fprintf(file, "	.mod_gain			resd	1\n");
+		fprintf(file, "	; work variables\n");
 		fprintf(file, "	.play_time			resq	1\n");
 		fprintf(file, "	.sample_offset_tmp	resd	1\n");
 		fprintf(file, "	.size\n");
