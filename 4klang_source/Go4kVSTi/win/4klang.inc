@@ -91,7 +91,7 @@
 %define		GO4K_USE_GMDLS_MOD_GAIN			; // define this to enable gm.dls gain modulation code
 %define		GO4K_USE_GMDLS_DYNAMIC_PITCH	; // define this to enable gm.dls note pitch tracking
 %define		GO4K_USE_GMDLS_LOWER_BOUNDS_CHECK; // define this to enable gm.dls lower bounds check (only needed to avoid crashes while editing)
-%define     GO4k_USE_GMDLS_FLAGS            ; // define this if any gm.dls feature that requires flags is used
+%define     GO4K_USE_GMDLS_FLAGS            ; // define this if any gm.dls feature that requires flags is used
 
 ; //----------------------------------------------------------------------------------------
 ; // utility macros
@@ -574,7 +574,7 @@ GO4K_GMDLS_ID		equ		14
 	db	%2	; detune
 	db	%3	; gain
 	dd	%4	; file_offset
-%ifdef GO4k_USE_GMDLS_FLAGS
+%ifdef GO4K_USE_GMDLS_FLAGS
 	db	%5	; flags
 %endif
 %endmacro
@@ -586,7 +586,7 @@ struc	go4kGMDLS_val_raw
 	.detune			resb	1
 	.gain			resb	1
 	.file_offset	resd	1
-%ifdef GO4k_USE_GMDLS_FLAGS
+%ifdef GO4K_USE_GMDLS_FLAGS
 	.flags			resb	1
 %endif
 	.size
