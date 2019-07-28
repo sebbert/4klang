@@ -1666,6 +1666,7 @@ struct SynthUses
 	bool gmdls_tm;
 	bool gmdls_dm;
 	bool gmdls_gm;
+	bool gmdls_flags;
 };
 
 void GetUses(SynthUses *uses, bool InstrumentUsed[])
@@ -1866,7 +1867,11 @@ void GetUses(SynthUses *uses, bool InstrumentUsed[])
 			}
 			if (v[0] == M_GMDLS)
 			{
+				auto valP = (GMDLS_valP)v;
 				uses->gmdls = true;
+
+				if (valP->flags & GMDLS_STATIC_PITCH)
+					uses->gmdls_flags = true;
 			}
 		}
 	}
@@ -2374,6 +2379,8 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 		fprintf(file, "%%define 	GO4K_USE_GMDLS_MOD_DETUNE\n");
 	if (uses.gmdls_gm)
 		fprintf(file, "%%define 	GO4K_USE_GMDLS_MOD_GAIN\n");
+	if (uses.gmdls_flags)
+		fprintf(file, "%%define 	GO4K_USE_GMDLS_FLAGS\n");
 
 		fprintf(file, "%%define	MAX_DELAY			65536\n");
 		fprintf(file, "%%define MAX_UNITS			64\n");
