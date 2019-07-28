@@ -2382,6 +2382,10 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 	if (uses.gmdls_flags)
 		fprintf(file, "%%define 	GO4K_USE_GMDLS_FLAGS\n");
 
+		fprintf(file, "%%define FIELD_OFFSET($structname, $fieldname) ($structname %%+ . %%+ $fieldname)\n");
+		fprintf(file, "%%define FIELD_BACKWARDS_OFFSET($structname, $fieldname) (FIELD_OFFSET($structname, $fieldname) - FIELD_OFFSET($structname, size))\n");
+		fprintf(file, "%%define RAW_VAL($strucname, $fieldname) [esi+FIELD_BACKWARDS_OFFSET($strucname, $fieldname)]\n");
+
 		fprintf(file, "%%define	MAX_DELAY			65536\n");
 		fprintf(file, "%%define MAX_UNITS			64\n");
 		fprintf(file, "%%define	MAX_UNIT_SLOTS	    16\n");
