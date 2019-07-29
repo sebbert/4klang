@@ -1409,14 +1409,14 @@ go4kGMDLS_static_pitch:
 	mov edx, _go4k_gmdls_buffer	; edx = gm.dls base address
 	add edx, RAW_VAL(go4kGMDLS_val_raw, file_offset)			; edx = gm.dls base address + file offset
 
-	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
-	jge short go4kGMDLS_noout	; If we've reached the end, don't play
-
 %ifdef GO4K_USE_GMDLS_LOWER_BOUNDS_CHECK
 	; Don't play if sample offset < 0
 	test eax,eax
 	js short go4kGMDLS_noout
 %endif
+
+	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
+	jge short go4kGMDLS_noout	; If we've reached the end, don't play
 
 	fild word [eax+edx]			; Load sample from [(edx = gmdls base pointer + file offset) + (eax = current sample offset)]
 	fdiv dword [c_32767]		; Convert from 16 bit sample
