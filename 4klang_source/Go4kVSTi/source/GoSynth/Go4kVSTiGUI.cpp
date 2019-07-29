@@ -1590,7 +1590,9 @@ void Go4kVSTiGUI_Create(HINSTANCE hInst)
 	GlobalScrollPos = 0;
 
 	Go4kVSTi_Init();
+
 	InitGmDlsSamples();
+
 	SynthObjP = Go4kVSTi_GetSynthObject();
 	UpdateControls(SelectedInstrument);
 
