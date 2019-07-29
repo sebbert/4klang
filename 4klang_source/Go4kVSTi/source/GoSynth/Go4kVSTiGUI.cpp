@@ -2376,11 +2376,11 @@ void SetSliderParams(int uid, BYTE* val, LPARAM lParam)
 		{
 			UpdateSliderValueCenter(IDC_GMDLS_TRANSPOSE, v->transpose);
 		}
-		if ((HWND)lParam == GetDlgItem(ModuleWnd[uid], IDC_GMDLS_DETUNE))
+		else if ((HWND)lParam == GetDlgItem(ModuleWnd[uid], IDC_GMDLS_DETUNE))
 		{
 			UpdateSliderValueCenter(IDC_GMDLS_DETUNE, v->detune);
 		}
-		if ((HWND)lParam == GetDlgItem(ModuleWnd[uid], IDC_GMDLS_GAIN))
+		else if ((HWND)lParam == GetDlgItem(ModuleWnd[uid], IDC_GMDLS_GAIN))
 		{
 			UpdateSliderValue(IDC_GMDLS_GAIN, v->gain);
 		}
