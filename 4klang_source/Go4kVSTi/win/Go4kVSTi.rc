@@ -1314,7 +1314,7 @@ BEGIN
     CONTROL         "", IDC_GMDLS_GAIN, "msctls_trackbar32", TBS_BOTH | TBS_NOTICKS | WS_TABSTOP, 75, 150, 180, 15
     CTEXT           " ", IDC_GMDLS_GAIN_VAL, 256, 152, 40, 12, SS_SUNKEN
 
-    PUSHBUTTON      "Once",   IDC_GMDLS_ONCE,     80,8,  40,10
+    PUSHBUTTON      "Once",   IDC_GMDLS_ONCE,     80,8,  40,10, WS_DISABLED
     PUSHBUTTON      "Repeat", IDC_GMDLS_REPEAT,  120,8,  40,10
     PUSHBUTTON      "Osc",    IDC_GMDLS_OSC,     160,8,  40,10
 END
