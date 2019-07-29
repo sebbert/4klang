@@ -282,6 +282,11 @@ typedef struct GLITCH_val
 } *GLITCH_valP;
 
 #define GMDLS_DYNAMIC_PITCH    (0x01 << 0)
+#define GMDLS_LOOP_MODE_ONCE   (0x00 << 1)
+#define GMDLS_LOOP_MODE_REPEAT (0x01 << 1)
+#define GMDLS_LOOP_MODE_OSC    (0x02 << 1)
+#define GMDLS_LOOP_MODE_BITS   (0x03 << 1)
+
 typedef struct GMDLS_val
 {
 	BYTE id;
