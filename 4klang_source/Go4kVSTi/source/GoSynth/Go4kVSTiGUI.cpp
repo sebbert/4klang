@@ -2104,7 +2104,14 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 		GMDLS_valP v = (GMDLS_valP)val;
 
 		bool dynamicPitch = SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_DYNAMIC_PITCH, BM_GETCHECK, 0, 0) == BST_CHECKED;
-		v->flags = (v->flags & ~GMDLS_DYNAMIC_PITCH) | dynamicPitch;
+		v->flags = (v->flags & ~GMDLS_DYNAMIC_PITCH) | (dynamicPitch<<0);
+
+		ButtonGroupChanged(IDC_GMDLS_ONCE, IDC_GMDLS_OSC, LOWORD(id), M_GMDLS, res);
+		if (res)
+		{
+			DWORD loopMode = res - IDC_GMDLS_ONCE;
+			v->flags = (v->flags & ~GMDLS_LOOP_MODE_BITS) | (loopMode << 1);
+		}
 
 		if (LOWORD(id) == IDC_GMDLS_SAMPLE)
 		{
@@ -3508,9 +3515,15 @@ void UpdateModule(int uid, BYTE* val)
 		InitSliderCenter(ModuleWnd[M_GMDLS], IDC_GMDLS_DETUNE, 0, 128, v->detune);
 		// gain
 		InitSlider(ModuleWnd[M_GMDLS], IDC_GMDLS_GAIN, 0, 128, v->gain);
-
 		// dynamic pitch
 		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_DYNAMIC_PITCH, BM_SETCHECK, v->flags & GMDLS_DYNAMIC_PITCH, 0);
+
+		// loop mode
+		DisableButtonGroup(IDC_GMDLS_ONCE, IDC_GMDLS_OSC, M_GMDLS);
+
+		BYTE loopModeBits = v->flags & GMDLS_LOOP_MODE_BITS;
+
+		EnableWindow(GetDlgItem(ModuleWnd[M_GMDLS], IDC_GMDLS_ONCE + (loopModeBits >> 1)), false);
 
 		static bool HasInitializedGmDlsSampleComboBox = false;
 		if (!HasInitializedGmDlsSampleComboBox) {
