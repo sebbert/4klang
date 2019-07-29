@@ -578,7 +578,11 @@ GO4K_GMDLS_ID		equ		14
 %endif
 %endmacro
 
-%define DYNAMIC_PITCH	(1<<0)
+%define DYNAMIC_PITCH		(1 << 0)
+
+%define LOOP_MODE_ONCE		(1 << 1)
+%define LOOP_MODE_REPEAT	(2 << 1)
+%define LOOP_MODE_OSC		(3 << 1)
 
 struc	go4kGMDLS_val_raw
 	.transpose		resb	1
