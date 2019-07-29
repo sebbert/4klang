@@ -159,11 +159,7 @@ section		.g4kgmdlspaths	data	align=1
 section .data
 %endif
 
-go4k_gmdls_path_0		db "drivers/gm.dls", 0
-
-%ifdef GO4K_USE_GMDLS_XP_VISTA_SUPPORT
-go4k_gmdls_path_1		db "drivers/etc/gm.dls", 0
-%endif
+go4k_gmdls_path			db "drivers/gm.dls", 0
 
 %endif
 
@@ -1716,25 +1712,15 @@ section .text
 %endif
 
 %define OF_READ					0
-%define INVALID_HANDLE_VALUE	-1
 
 extern	_OpenFile@12
 extern _ReadFile@20
 
 export_func go4kLoadGmdls@0
-	mov edx, go4k_gmdls_path_0
-
-go4kLoadGmdls_do:
 	push dword OF_READ		; // uStyle
 	push _go4k_gmdls_buffer	; // lpReOpenBuff (use gmdls_buffer as this is only needed temporarily)
-	push edx				; // lpFileName
+	push go4k_gmdls_path	; // lpFileName
 	call _OpenFile@12
-	
-%ifdef GO4K_USE_GMDLS_XP_VISTA_SUPPORT
-	mov edx, go4k_gmdls_path_1
-	cmp eax, INVALID_HANDLE_VALUE
-	je short go4kLoadGmdls_do
-%endif
 
 	push dword 0			; // lpOverlapped
 	push dword 0			; // lpNumberOfBytesRead
