@@ -1663,6 +1663,8 @@ struct SynthUses
 	bool glitch_use;
 
 	bool gmdls;
+	bool gmdls_transpose_val;
+	bool gmdls_detune_val;
 	bool gmdls_tm;
 	bool gmdls_dm;
 	bool gmdls_gm;
@@ -1884,6 +1886,15 @@ void GetUses(SynthUses *uses, bool InstrumentUsed[])
 				if (uses->gmdls_dynamic_pitch && uses->gmdls_static_pitch)
 				{
 					uses->gmdls_flags = true;
+				}
+
+				if (valP->transpose != 128)
+				{
+					uses->gmdls_transpose_val;
+				}
+				if (valP->detune != 128)
+				{
+					uses->gmdls_detune_val;
 				}
 			}
 		}
