@@ -281,8 +281,8 @@ typedef struct GLITCH_val
 	BYTE	guidelay;
 } *GLITCH_valP;
 
-#define GMDLS_DYNAMIC_PITCH    (0x01 << 0)
-#define GMDLS_PLAYBACK_LOOP    (0x01 << 1)
+#define GMDLS_DYNAMIC_PITCH    (1 << 0)
+#define GMDLS_PLAYBACK_LOOP    (1 << 1)
 
 typedef struct GMDLS_val
 {
