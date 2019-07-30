@@ -92,6 +92,8 @@
 %define		GO4K_USE_GMDLS_STATIC_PITCH		; // define this to enable gm.dls static pitch when dynamic pitch is enabled
 %define		GO4K_USE_GMDLS_LOWER_BOUNDS_CHECK;// define this to enable gm.dls lower bounds check (only needed to avoid crashes while editing)
 %define		GO4K_USE_GMDLS_FLAGS			; // define this if any gm.dls feature that requires flags is used
+%define		GO4K_USE_GMDLS_LOOP_MODE_ONCE	; // define this to enable the "once" loop mode
+%define		GO4K_USE_GMDLS_LOOP_MODE_REPEAT	; // define this to enable the "repeat" loop mode
 
 ; //----------------------------------------------------------------------------------------
 ; // utility macros
