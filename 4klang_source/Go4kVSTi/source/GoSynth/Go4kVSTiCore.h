@@ -293,7 +293,7 @@ typedef struct GMDLS_val
 	DWORD fileOffset;
 	BYTE flags;
 // GUI STUFF
-	DWORD sampleEntryListIndex;
+	WORD sampleEntryListIndex;
 } *GMDLS_valP;
 
 /////////////////////////////////////////////////////////////////////////////////////
