@@ -1313,7 +1313,7 @@ BEGIN
     CTEXT           " ", IDC_GMDLS_GAIN_VAL, 256, 152, 40, 12, SS_SUNKEN
 
     PUSHBUTTON      "Once",   IDC_GMDLS_ONCE,     80,8,  40,10, WS_DISABLED
-    PUSHBUTTON      "Repeat", IDC_GMDLS_REPEAT,  120,8,  40,10
+    PUSHBUTTON      "Loop",   IDC_GMDLS_LOOP,    120,8,  40,10
     PUSHBUTTON      "Osc",    IDC_GMDLS_OSC,     160,8,  40,10
 END
 

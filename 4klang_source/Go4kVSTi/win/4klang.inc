@@ -92,8 +92,8 @@
 %define		GO4K_USE_GMDLS_STATIC_PITCH		; // define this to enable gm.dls static pitch when dynamic pitch is enabled
 %define		GO4K_USE_GMDLS_EDITOR_CHECKS	; // define this to enable extra bounds checks for gm.dls while editing
 %define		GO4K_USE_GMDLS_FLAGS			; // define this if any gm.dls feature that requires flags is used
-%define		GO4K_USE_GMDLS_LOOP_MODE_ONCE	; // define this to enable the "once" loop mode
-%define		GO4K_USE_GMDLS_LOOP_MODE_REPEAT	; // define this to enable the "repeat" loop mode
+%define		GO4K_USE_GMDLS_PLAYBACK_LOOP	; // define this to enable looped playback
+%define		GO4K_USE_GMDLS_PLAYBACK_ONCE	; // define this to enable single-shot playback if using looped playback
 
 ; //----------------------------------------------------------------------------------------
 ; // utility macros
@@ -582,11 +582,7 @@ GO4K_GMDLS_ID		equ		14
 %endmacro
 
 %define DYNAMIC_PITCH		(1 << 0)
-
-%define LOOP_MODE_ONCE		(0 << 1)
-%define LOOP_MODE_REPEAT	(1 << 1)
-%define LOOP_MODE_OSC		(2 << 1)
-%define LOOP_MODE_BITS		(3 << 1)
+%define PLAYBACK_LOOP		(1 << 1)
 
 struc	go4kGMDLS_val_raw
 	.transpose		resb	1

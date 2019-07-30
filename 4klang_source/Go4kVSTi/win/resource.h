@@ -996,7 +996,7 @@
 #define IDC_GMDLS_GAIN                  6068
 #define IDC_GMDLS_GAIN_VAL              6069
 #define IDC_GMDLS_ONCE                  6100
-#define IDC_GMDLS_REPEAT                6101
+#define IDC_GMDLS_LOOP                  6101
 #define IDC_GMDLS_OSC                   6102
 
 // Next default values for new objects

@@ -2107,8 +2107,18 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 		ButtonGroupChanged(IDC_GMDLS_ONCE, IDC_GMDLS_OSC, LOWORD(id), M_GMDLS, res);
 		if (res)
 		{
-			DWORD loopMode = res - IDC_GMDLS_ONCE;
-			v->flags = (v->flags & ~GMDLS_LOOP_MODE_BITS) | (loopMode << 1);
+			if (res == IDC_GMDLS_ONCE)
+			{
+				v->flags &= ~GMDLS_PLAYBACK_LOOP;
+			}
+			if (res == IDC_GMDLS_LOOP || res == IDC_GMDLS_OSC)
+			{
+				v->flags |= GMDLS_PLAYBACK_LOOP;
+			}
+			if (res == IDC_GMDLS_OSC)
+			{
+				// TODO
+			}
 		}
 
 		if (LOWORD(id) == IDC_GMDLS_SAMPLE)
@@ -3519,9 +3529,10 @@ void UpdateModule(int uid, BYTE* val)
 		// loop mode
 		DisableButtonGroup(IDC_GMDLS_ONCE, IDC_GMDLS_OSC, M_GMDLS);
 
-		BYTE loopModeBits = v->flags & GMDLS_LOOP_MODE_BITS;
-
-		EnableWindow(GetDlgItem(ModuleWnd[M_GMDLS], IDC_GMDLS_ONCE + (loopModeBits >> 1)), false);
+		if (v->flags & GMDLS_PLAYBACK_LOOP)
+			EnableWindow(GetDlgItem(ModuleWnd[M_GMDLS], IDC_GMDLS_LOOP), false);
+		else
+			EnableWindow(GetDlgItem(ModuleWnd[M_GMDLS], IDC_GMDLS_ONCE), false);
 
 		static bool HasInitializedGmDlsSampleComboBox = false;
 		if (!HasInitializedGmDlsSampleComboBox) {

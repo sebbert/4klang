@@ -1414,9 +1414,9 @@ go4kGMDLS_static_pitch:
 
 	fabs						; Mirror at the zero point to allow backwards playback, and to avoid negative offset
 
-%ifdef GO4K_USE_GMDLS_LOOP_MODE_REPEAT
-%ifdef GO4K_USE_GMDLS_LOOP_MODE_ONCE
-	test byte RAW_VAL(go4kGMDLS_val_raw, flags), LOOP_MODE_BITS
+%ifdef GO4K_USE_GMDLS_PLAYBACK_LOOP
+%ifdef GO4K_USE_GMDLS_PLAYBACK_ONCE
+	test byte RAW_VAL(go4kGMDLS_val_raw, flags), PLAYBACK_LOOP
 	jz go4kGMDLS_no_repeat
 %endif
 
