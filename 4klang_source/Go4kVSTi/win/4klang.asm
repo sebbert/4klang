@@ -1425,7 +1425,7 @@ go4kGMDLS_no_repeat:
 	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
 	and al, ~1					; Quantize to even 16 bit word offset
 
-%ifdef GO4K_USE_GMDLS_LOWER_BOUNDS_CHECK
+%ifdef GO4K_USE_GMDLS_EDITOR_CHECKS
 	; Don't play if sample offset < 0
 	test eax,eax
 	js short go4kGMDLS_noout
