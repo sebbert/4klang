@@ -29,7 +29,7 @@ struct GmDlsSample
 
 static GmDlsSample GmDlsSamples[GMDLS_NUM_SAMPLES + 1];
 
-void InitGmDlsSamples()
+void LoadGmDlsSamples()
 {
 	memset(GmDlsSamples, 0, sizeof(GmDlsSample) * (1 + GMDLS_NUM_SAMPLES));
 
@@ -1589,7 +1589,7 @@ void Go4kVSTiGUI_Create(HINSTANCE hInst)
 
 	Go4kVSTi_Init();
 
-	InitGmDlsSamples();
+	LoadGmDlsSamples();
 
 	SynthObjP = Go4kVSTi_GetSynthObject();
 	UpdateControls(SelectedInstrument);
