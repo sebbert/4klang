@@ -90,7 +90,7 @@
 %define		GO4K_USE_GMDLS_MOD_GAIN			; // define this to enable gm.dls gain modulation code
 %define		GO4K_USE_GMDLS_DYNAMIC_PITCH	; // define this to enable gm.dls note pitch tracking
 %define		GO4K_USE_GMDLS_STATIC_PITCH		; // define this to enable gm.dls static pitch when dynamic pitch is enabled
-%define		GO4K_USE_GMDLS_EDITOR_CHECKS    ; // define this to enable extra bounds checks for gm.dls while editing
+%define		GO4K_USE_GMDLS_EDITOR_CHECKS	; // define this to enable extra bounds checks for gm.dls while editing
 %define		GO4K_USE_GMDLS_FLAGS			; // define this if any gm.dls feature that requires flags is used
 %define		GO4K_USE_GMDLS_LOOP_MODE_ONCE	; // define this to enable the "once" loop mode
 %define		GO4K_USE_GMDLS_LOOP_MODE_REPEAT	; // define this to enable the "repeat" loop mode
