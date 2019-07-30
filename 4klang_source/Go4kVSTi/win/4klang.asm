@@ -1366,6 +1366,12 @@ export_func go4kGMDLS_func@0
 	test eax,eax
 	jz go4kGMDLS_noout
 
+%ifdef GO4K_USE_GMDLS_EDITOR_CHECKS
+	mov dword eax, RAW_VAL(go4kGMDLS_val_raw, file_offset)
+	test eax,eax
+	jz go4kGMDLS_noout
+%endif
+
 	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
 %ifdef GO4K_USE_GMDLS_MOD_TRANSPOSE
