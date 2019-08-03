@@ -1372,6 +1372,9 @@ export_func go4kGMDLS_func@0
 	jz go4kGMDLS_noout
 %endif
 
+	mov eax, _go4k_gmdls_buffer							; edx = gm.dls base address
+	add eax, RAW_VAL(go4kGMDLS_val_raw, file_offset)	; edx = gm.dls base address + file offset
+
 	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
 %ifdef GO4K_USE_GMDLS_MOD_TRANSPOSE
@@ -1391,16 +1394,13 @@ export_func go4kGMDLS_func@0
 	fld qword [WRK+go4kGMDLS_wrk.play_time]
 	fxch
 
-	mov edx, _go4k_gmdls_buffer							; edx = gm.dls base address
-	add edx, RAW_VAL(go4kGMDLS_val_raw, file_offset)	; edx = gm.dls base address + file offset
-
 %ifdef GO4K_USE_GMDLS_DYNAMIC_PITCH
 %ifdef GO4K_USE_GMDLS_STATIC_PITCH
 	test byte RAW_VAL(go4kGMDLS_val_raw, flags), DYNAMIC_PITCH
 	jz short go4kGMDLS_static_pitch
 %endif
 	fiadd dword [ecx-4]	; add note
-	fisub dword [c_60]
+	;fisub dword [c_60]						;;;;;;;;;; CYCLE ;;;;;;;;;;
 go4kGMDLS_static_pitch:
 %endif
 
@@ -1409,8 +1409,13 @@ go4kGMDLS_static_pitch:
 	fmul dword [FREQ_NORMALIZE]
 	fadd st0, st1				; Add delta to previous time
 	fstp qword [WRK+go4kGMDLS_wrk.play_time] ; Store playback position for next tick
-	fimul dword [c_11025]		; Multiply by 11025 = sample rate (22050 hz) / bytes per sample (2)
-								; st(0) now contains the "byte" offset into the sample, which we will later quantize to an even 16 bit word offset
+	;fimul dword [c_11025]		; Multiply by 11025 = sample rate (22050 hz) / bytes per sample (2)
+								;; st(0) now contains the "byte" offset into the sample, which we will later quantize to an even 16 bit word offset
+
+; loading size here
+	fild dword [eax-4]			; st0 = sample size in bytes
+	fxch						; st0 = pos,		st1 = size
+	fmul st0, st1				; st0 = pos*size,	st1 = size
 
 	fabs						; Mirror at the zero point to allow backwards playback, and to avoid negative offset
 
@@ -1420,27 +1425,28 @@ go4kGMDLS_static_pitch:
 	jz go4kGMDLS_no_repeat
 %endif
 
-	fild dword [edx-4]			; st0 = sample size in bytes
-	fxch						; st0 = pos, st1 = size
 	fprem						; pos = PartialRemainder(pos, size)
-	fstp st1					; discard size
+
 go4kGMDLS_no_repeat:
 %endif
 
-	fistp dword [WRK+go4kGMDLS_wrk.sample_offset_tmp]
-	mov eax, [WRK+go4kGMDLS_wrk.sample_offset_tmp]
-	and al, ~1					; Quantize to even 16 bit word offset
+	fstp st1					; discard size
+; discarded size here
+
+	fistp dword [WRK+go4kGMDLS_wrk.temp]
+	mov edx, [WRK+go4kGMDLS_wrk.temp]
+	and dl, ~1					; Quantize to even 16 bit word offset
 
 %ifdef GO4K_USE_GMDLS_EDITOR_CHECKS
 	; Don't play if sample offset < 0
-	test eax,eax
+	test edx,edx
 	js short go4kGMDLS_noout
 %endif
 
-	cmp eax, [edx-4]			; Compare with size (dword preceding the sample buffer)
+	cmp edx, [eax-4]			; Compare with size (dword preceding the sample buffer)
 	jge short go4kGMDLS_noout	; If we've reached the end, don't play
 
-	fild word [eax+edx]			; Load sample from [(edx = gmdls base pointer + file offset) + (eax = current sample offset)]
+	fild word [eax+edx]			; Load sample from [(eax = gmdls base pointer + offset) + (edx = current sample offset)]
 	fdiv dword [c_32767]		; Convert from 16 bit sample
 
 %ifdef GO4K_USE_GMDLS_MOD_GAIN

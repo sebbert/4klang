@@ -583,6 +583,7 @@ GO4K_GMDLS_ID		equ		14
 
 %define DYNAMIC_PITCH		(1 << 0)
 %define PLAYBACK_LOOP		(1 << 1)
+%define SINGLE_CYCLE		(1 << 2)
 
 struc	go4kGMDLS_val_raw
 	.transpose		resb	1
@@ -607,7 +608,7 @@ struc	go4kGMDLS_wrk
 	.mod_gain			resd	1
 	; work variables
 	.play_time			resq	1
-	.sample_offset_tmp	resd	1
+	.temp				resd	1
 	.size
 endstruc
 %endif
