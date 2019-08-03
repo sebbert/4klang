@@ -64,6 +64,7 @@ void LoadGmDlsSamples()
 		wave += 4;
 		auto wsmpChunkSize = *((unsigned int *)wave);
 		wave += 4;
+		auto wsmpChunk = wave;
 		wave += wsmpChunkSize;
 
 		// Skip data chunk
@@ -105,7 +106,7 @@ void LoadGmDlsSamples()
 	
 		auto entry = &GmDlsSamples[i + 1];
 		entry->name = (const char *)info;
-		entry->fileOffsetInBytes = waveData - &go4k_gmdls_buffer;
+		entry->fileOffsetInBytes = wsmpChunk - &go4k_gmdls_buffer;
 		entry->sizeInBytes = dataChunkSize;
 
 		ptr += waveListSize;

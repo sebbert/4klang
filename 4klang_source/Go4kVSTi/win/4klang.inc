@@ -595,12 +595,14 @@ struc	go4kGMDLS_val_raw
 %endif
 	.size
 endstruc
+
 struc	go4kGMDLS_val
 	.transpose		resd	1
 	.detune			resd	1
 	.gain			resd	1
 	.size
 endstruc
+
 struc	go4kGMDLS_wrk
 	; modulation targets
 	.mod_transpose		resd	1
@@ -612,10 +614,14 @@ struc	go4kGMDLS_wrk
 	.size
 endstruc
 
-; WSMP chunk, including chunk header
-struc go4kGMDLS_wsmp_ck
-	.ulChunkTag			resd	1
+struc DLS_ck
+	.ulChunkID			resd	1
 	.cbChunkSize		resd	1
+	.size
+endstruc
+
+; DLS WSMP chunk
+struc DLS_wsmp_ck
 	.cbSize				resd	1
 	.usUnityNote		resw	1
 	.sFineTune			resw	1
@@ -626,11 +632,12 @@ struc go4kGMDLS_wsmp_ck
 	.size
 endstruc
 
-struc go4kGMDLS_WSMP_loop
+struc DLS_wsmp_loop
 	.cbSize				resd	1
 	.ulType				resd	1
 	.ulStart			resd	1
 	.ulLength			resd	1
+	.size
 endstruc
 
 %endif

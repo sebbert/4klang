@@ -119,7 +119,6 @@ c_32767					dd		32767.0
 %endif
 
 %ifdef GO4K_USE_GMDLS
-c_60					dd		60
 c_11025					dd		11025
 %endif
 
@@ -1400,7 +1399,7 @@ export_func go4kGMDLS_func@0
 	jz short go4kGMDLS_static_pitch
 %endif
 	fiadd dword [ecx-4]	; add note
-	;fisub dword [c_60]						;;;;;;;;;; CYCLE ;;;;;;;;;;
+	fisub word [eax+DLS_wsmp_ck.usUnityNote]
 go4kGMDLS_static_pitch:
 %endif
 
@@ -1409,29 +1408,28 @@ go4kGMDLS_static_pitch:
 	fmul dword [FREQ_NORMALIZE]
 	fadd st0, st1				; Add delta to previous time
 	fstp qword [WRK+go4kGMDLS_wrk.play_time] ; Store playback position for next tick
-	;fimul dword [c_11025]		; Multiply by 11025 = sample rate (22050 hz) / bytes per sample (2)
-								;; st(0) now contains the "byte" offset into the sample, which we will later quantize to an even 16 bit word offset
+	fimul dword [c_11025]		; Multiply by 11025 = sample rate (22050 hz) / bytes per sample (2)
+								; st(0) now contains the "byte" offset into the sample, which we will later quantize to an even 16 bit word offset
 
-; loading size here
-	fild dword [eax-4]			; st0 = sample size in bytes
-	fxch						; st0 = pos,		st1 = size
-	fmul st0, st1				; st0 = pos*size,	st1 = size
+	add eax, [eax+FIELD_BACKWARDS_OFFSET(DLS_ck, cbChunkSize)]
+	; eax now points to first byte of of data chunk header
 
 	fabs						; Mirror at the zero point to allow backwards playback, and to avoid negative offset
 
 %ifdef GO4K_USE_GMDLS_PLAYBACK_LOOP
+
 %ifdef GO4K_USE_GMDLS_PLAYBACK_ONCE
 	test byte RAW_VAL(go4kGMDLS_val_raw, flags), PLAYBACK_LOOP
 	jz go4kGMDLS_no_repeat
 %endif
 
+	fild dword [eax+4]			; load sample size in bytes
+	fxch
 	fprem						; pos = PartialRemainder(pos, size)
+	fstp st1					; discard size
 
 go4kGMDLS_no_repeat:
 %endif
-
-	fstp st1					; discard size
-; discarded size here
 
 	fistp dword [WRK+go4kGMDLS_wrk.temp]
 	mov edx, [WRK+go4kGMDLS_wrk.temp]
@@ -1443,11 +1441,15 @@ go4kGMDLS_no_repeat:
 	js short go4kGMDLS_noout
 %endif
 
-	cmp edx, [eax-4]			; Compare with size (dword preceding the sample buffer)
-	jge short go4kGMDLS_noout	; If we've reached the end, don't play
+	cmp edx, [eax+DLS_ck.cbChunkSize]	; Compare with data chunk size
+	jge short go4kGMDLS_noout			; If we've reached the end, don't play
 
-	fild word [eax+edx]			; Load sample from [(eax = gmdls base pointer + offset) + (edx = current sample offset)]
-	fdiv dword [c_32767]		; Convert from 16 bit sample
+	fild word [eax+edx+DLS_ck.size]		; Load sample from
+										;	  eax			= pointer to data chunk header
+										;	+ DLS_ck.size	= size of data chunk header
+										;	+ edx			= current sample offset
+
+	fdiv dword [c_32767]				; Convert from 16 bit sample
 
 %ifdef GO4K_USE_GMDLS_MOD_GAIN
 	fld	dword [go4k_transformed_values + go4kGMDLS_val.gain]
