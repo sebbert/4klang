@@ -611,6 +611,28 @@ struc	go4kGMDLS_wrk
 	.temp				resd	1
 	.size
 endstruc
+
+; WSMP chunk, including chunk header
+struc go4kGMDLS_wsmp_ck
+	.ulChunkTag			resd	1
+	.cbChunkSize		resd	1
+	.cbSize				resd	1
+	.usUnityNote		resw	1
+	.sFineTune			resw	1
+	.lAttenuation		resd	1
+	.fulOptions			resd	1
+	.cSampleLoops		resd	1
+	.loops
+	.size
+endstruc
+
+struc go4kGMDLS_WSMP_loop
+	.cbSize				resd	1
+	.ulType				resd	1
+	.ulStart			resd	1
+	.ulLength			resd	1
+endstruc
+
 %endif
 ; //----------------------------------------------------------------------------------------
 ; // Voice struct
