@@ -135,7 +135,7 @@ void Go4kVSTi_ResetInstrument(char channel)
 
 	// set default units
 	Go4kVSTi_InitSlot(SynthObj.InstrumentValues[channel][0], channel, M_ENV);
-	Go4kVSTi_InitSlot(SynthObj.InstrumentValues[channel][1], channel, M_VCO);
+	Go4kVSTi_InitSlot(SynthObj.InstrumentValues[channel][1], channel, M_GMDLS);
 	Go4kVSTi_InitSlot(SynthObj.InstrumentValues[channel][2], channel, M_FOP); ((FOP_valP)(SynthObj.InstrumentValues[channel][2]))->flags = FOP_MULP;
 	Go4kVSTi_InitSlot(SynthObj.InstrumentValues[channel][3], channel, M_DLL);
 	Go4kVSTi_InitSlot(SynthObj.InstrumentValues[channel][4], channel, M_PAN);
@@ -378,9 +378,8 @@ void Go4kVSTi_InitSlot(BYTE* slot, int channel, int type)
 		v->transpose = 64;
 		v->detune = 64;
 		v->gain = 128;
-		v->fileOffset = 0;
+		v->waveIndex = 0;
 		v->flags = GMDLS_DYNAMIC_PITCH;
-		v->sampleEntryListIndex = 0;
 	}
 }
 
@@ -3271,7 +3270,7 @@ void Go4kVSTi_SaveByteStream(HINSTANCE hInst, char* filename, int useenvlevels, 
 					if (v->flags & GMDLS_DYNAMIC_PITCH)
 						flagstr = "DYNAMIC_PITCH";
 
-					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),GAIN(%d),FILE_OFFSET(%d),FLAGS(%s)\n", v->transpose, v->detune, v->gain, v->fileOffset, flagstr);
+					sprintf(valstr, "\tGO4K_GMDLS\tTRANSPOSE(%d),DETUNE(%d),GAIN(%d),WAVE_INDEX(%d),FLAGS(%s)\n", v->transpose, v->detune, v->gain, v->waveIndex, flagstr);
 				}
 
 				ValueString += valstr;

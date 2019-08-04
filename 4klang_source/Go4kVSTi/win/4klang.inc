@@ -569,13 +569,18 @@ endstruc
 ; //----------------------------------------------------------------------------------------
 %ifdef GO4K_USE_GMDLS
 
-%define FILE_OFFSET(val)	val
+%define GMDLS_PTBL_DATA_OFFSET			0x00043e3a
+%define GMDLS_WAVE_LIST_WSMP_CK_OFFSET	0x00044630
+
+%define WAVE_INDEX(val)	val
+
 GO4K_GMDLS_ID		equ		14
+
 %macro	GO4K_GMDLS 5
 	db	%1	; transpose
 	db	%2	; detune
 	db	%3	; gain
-	dd	%4	; file_offset
+	dw	%4	; wave_index
 %ifdef GO4K_USE_GMDLS_FLAGS
 	db	%5	; flags
 %endif
@@ -589,7 +594,7 @@ struc	go4kGMDLS_val_raw
 	.transpose		resb	1
 	.detune			resb	1
 	.gain			resb	1
-	.file_offset	resd	1
+	.wave_index		resw	1
 %ifdef GO4K_USE_GMDLS_FLAGS
 	.flags			resb	1
 %endif
@@ -637,6 +642,23 @@ struc DLS_wsmp_loop
 	.ulType				resd	1
 	.ulStart			resd	1
 	.ulLength			resd	1
+	.size
+endstruc
+
+struc DLS_ptbl_ck
+	.cbSize				resd	1
+	.cCues				resd	1
+	.poolcues
+	.size
+endstruc
+
+struc DLS_fmt_ck
+	.wFormatTag			resW	1
+	.wChannels			resW	1
+	.dwSamplesPerSec	resD	1
+	.dwAvgBytesPerSec	resD	1
+	.wBlockAlign		resD	1
+	.wBitsPerSample		resW	1
 	.size
 endstruc
 

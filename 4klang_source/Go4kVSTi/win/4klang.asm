@@ -1366,13 +1366,10 @@ export_func go4kGMDLS_func@0
 	jz go4kGMDLS_noout
 
 %ifdef GO4K_USE_GMDLS_EDITOR_CHECKS
-	mov dword eax, RAW_VAL(go4kGMDLS_val_raw, file_offset)
-	test eax,eax
-	jz go4kGMDLS_noout
+	;mov dword eax, RAW_VAL(go4kGMDLS_val_raw, file_offset)
+	;test eax,eax
+	;jz go4kGMDLS_noout
 %endif
-
-	mov eax, _go4k_gmdls_buffer							; edx = gm.dls base address
-	add eax, RAW_VAL(go4kGMDLS_val_raw, file_offset)	; edx = gm.dls base address + file offset
 
 	fld dword [edx+go4kGMDLS_val.transpose]
 	fsub dword [c_0_5]
@@ -1389,9 +1386,9 @@ export_func go4kGMDLS_func@0
 	fadd st0
 	faddp
 
-	; Since we want to include the zeroeth sample, we calculate the playback time and store it for the next sample
-	fld qword [WRK+go4kGMDLS_wrk.play_time]
-	fxch
+	movzx eax, word RAW_VAL(go4kGMDLS_val_raw, wave_index)			; eax = sample index
+	mov eax, [_go4k_gmdls_buffer + GMDLS_PTBL_DATA_OFFSET + eax*4]	; eax = offset from start of wave list
+	add eax,  _go4k_gmdls_buffer + GMDLS_WAVE_LIST_WSMP_CK_OFFSET	; eax = pointer to start of WSMP chunk (first byte after chunk header)
 
 %ifdef GO4K_USE_GMDLS_DYNAMIC_PITCH
 %ifdef GO4K_USE_GMDLS_STATIC_PITCH
@@ -1406,7 +1403,11 @@ go4kGMDLS_static_pitch:
 	fmul dword [c_i12]
 	call _Power@0
 	fmul dword [FREQ_NORMALIZE]
-	fadd st0, st1				; Add delta to previous time
+
+	; Since we want to include the zeroeth sample, we calculate the playback time and store it for the next sample
+	fld qword [WRK+go4kGMDLS_wrk.play_time]
+	fadd st1, st0				; Add delta to previous time
+	fxch
 	fstp qword [WRK+go4kGMDLS_wrk.play_time] ; Store playback position for next tick
 	fimul dword [c_11025]		; Multiply by 11025 = sample rate (22050 hz) / bytes per sample (2)
 								; st(0) now contains the "byte" offset into the sample, which we will later quantize to an even 16 bit word offset

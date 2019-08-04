@@ -23,19 +23,19 @@ static const int GMDLS_WAVE_LIST_OFFSET = 0x00044602;
 struct GmDlsSample
 {
 	const char *name;
-	unsigned fileOffsetInBytes;
+	unsigned waveIndex;
 	unsigned sizeInBytes;
 };
 
-static GmDlsSample GmDlsSamples[GMDLS_NUM_SAMPLES + 1];
+static GmDlsSample GmDlsSamples[GMDLS_NUM_SAMPLES];
 
 void LoadGmDlsSamples()
 {
-	memset(GmDlsSamples, 0, sizeof(GmDlsSample) * (1 + GMDLS_NUM_SAMPLES));
-
+	memset(GmDlsSamples, 0, sizeof(GmDlsSample) * (GMDLS_NUM_SAMPLES));
+/*
 	GmDlsSamples[0].name = "<No sample>";
 	GmDlsSamples[0].fileOffsetInBytes = 0;
-	GmDlsSamples[0].sizeInBytes = 0;
+	GmDlsSamples[0].sizeInBytes = 0*/;
 
 	auto ptr = &go4k_gmdls_buffer + GMDLS_WAVE_LIST_OFFSET;
 
@@ -104,9 +104,9 @@ void LoadGmDlsSamples()
 
 		// Insert name into appropriate group
 	
-		auto entry = &GmDlsSamples[i + 1];
+		auto entry = &GmDlsSamples[i];
 		entry->name = (const char *)info;
-		entry->fileOffsetInBytes = wsmpChunk - &go4k_gmdls_buffer;
+		entry->waveIndex = i;// wsmpChunk - &go4k_gmdls_buffer;
 		entry->sizeInBytes = dataChunkSize;
 
 		ptr += waveListSize;
@@ -407,7 +407,7 @@ char* GetUnitString(BYTE* unit, char* unitname)
 	if (unit[0] == M_GMDLS)
 	{
 		GMDLS_valP val = (GMDLS_valP)unit;
-		auto sampleEntry = &GmDlsSamples[val->sampleEntryListIndex];
+		auto sampleEntry = &GmDlsSamples[val->waveIndex];
 		snprintf(UnitDesc, 127, "  (%s)", sampleEntry->name);
 	}
 	sprintf(unitname, "%s%s", UnitName[unit[0]], UnitDesc);
@@ -2127,12 +2127,11 @@ void SetButtonParams(int uid, BYTE* val, WPARAM id, LPARAM lParam)
 			auto wnd = ModuleWnd[M_GMDLS];
 			int entryIndex = SendDlgItemMessage(wnd, IDC_GMDLS_SAMPLE, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 
-			if (entryIndex >= 0 && entryIndex < (GMDLS_NUM_SAMPLES + 1))
+			if (entryIndex >= 0 && entryIndex < GMDLS_NUM_SAMPLES)
 			{
 				auto entry = &GmDlsSamples[entryIndex];
 
-				v->fileOffset = entry->fileOffsetInBytes;
-				v->sampleEntryListIndex = entryIndex;
+				v->waveIndex = entry->waveIndex;
 			}
 		}
 	}
@@ -3539,7 +3538,7 @@ void UpdateModule(int uid, BYTE* val)
 		if (!HasInitializedGmDlsSampleComboBox) {
 			SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
 
-			for (int i = 0; i < GMDLS_NUM_SAMPLES + 1; ++i)
+			for (int i = 0; i < GMDLS_NUM_SAMPLES; ++i)
 			{
 				auto sample = &GmDlsSamples[i];
 				SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_ADDSTRING, (WPARAM)0, (LPARAM)sample->name);
@@ -3548,7 +3547,7 @@ void UpdateModule(int uid, BYTE* val)
 			HasInitializedGmDlsSampleComboBox = true;
 		}
 
-		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_SETCURSEL, (WPARAM)v->sampleEntryListIndex, (LPARAM)0);
+		SendDlgItemMessage(ModuleWnd[M_GMDLS], IDC_GMDLS_SAMPLE, CB_SETCURSEL, (WPARAM)v->waveIndex, (LPARAM)0);
   }
 }
 

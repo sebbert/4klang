@@ -290,10 +290,8 @@ typedef struct GMDLS_val
 	BYTE transpose;
 	BYTE detune;
 	BYTE gain;
-	DWORD fileOffset;
+	WORD waveIndex;
 	BYTE flags;
-// GUI STUFF
-	WORD sampleEntryListIndex;
 } *GMDLS_valP;
 
 /////////////////////////////////////////////////////////////////////////////////////
