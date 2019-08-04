@@ -120,6 +120,7 @@ c_32767					dd		32767.0
 
 %ifdef GO4K_USE_GMDLS
 c_11025					dd		11025
+c_100					dd		100
 %endif
 
 c_i128					dd		0.0078125
@@ -1399,6 +1400,11 @@ export_func go4kGMDLS_func@0
 go4kGMDLS_static_pitch:
 %endif
 	fisub word [eax+DLS_wsmp_ck.usUnityNote]
+
+	fild word [eax+DLS_wsmp_ck.sFineTune]
+	fdiv dword [c_32767]
+	fimul dword [c_100]
+	fsubp
 
 	fmul dword [c_i12]
 	call _Power@0
