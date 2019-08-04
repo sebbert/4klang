@@ -625,7 +625,6 @@ struc DLS_ck
 	.size
 endstruc
 
-; DLS WSMP chunk
 struc DLS_wsmp_ck
 	.cbSize				resd	1
 	.usUnityNote		resw	1
