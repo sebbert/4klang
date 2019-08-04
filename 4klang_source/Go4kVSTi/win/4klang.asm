@@ -1396,9 +1396,9 @@ export_func go4kGMDLS_func@0
 	jz short go4kGMDLS_static_pitch
 %endif
 	fiadd dword [ecx-4]	; add note
-	fisub word [eax+DLS_wsmp_ck.usUnityNote]
 go4kGMDLS_static_pitch:
 %endif
+	fisub word [eax+DLS_wsmp_ck.usUnityNote]
 
 	fmul dword [c_i12]
 	call _Power@0
