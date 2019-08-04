@@ -625,6 +625,12 @@ struc DLS_ck
 	.size
 endstruc
 
+struc DLS_list_ck
+	.listType			resd	1
+	.entries
+	.size
+endstruc
+
 struc DLS_wsmp_ck
 	.cbSize				resd	1
 	.usUnityNote		resw	1
